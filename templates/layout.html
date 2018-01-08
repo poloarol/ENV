@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=10">
+    <meta content="IE=edge, chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="Bioinformatics WebTools" name="description">
+    <meta charset="utf-8" http-equiv="enconding">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <title>Bioinformatics Tools</title>
+  </head>
+  <body>
+    <nav>
+      <div class="ui inverted borderless menu">
+        <a href="{{url_for('index')}}" class="item">Home</a>
+        <div class="right menu">
+          <a href="{{url_for('mapping')}}" class="item">GenomeMap</a>
+          <a href="{{url_for('phylo')}}" class="item">Phylogeny</a>
+          <a href="#" class="item">FAQ</a>
+        </div>
+      </div>
+    </nav>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <h4>Boddy Lab</h4>
+        <h3>University of Ottawa</h3>
+      </div>
+    </div>
+  </body>
+</html>

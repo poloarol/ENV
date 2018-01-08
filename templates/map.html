@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+  <section>
+    <form class="ui form segment" action="{{ url_for('mapping') }}" method="POST" enctype="multipart/form-data">
+      <h4 class="ui divider header">GenomeMap</h4>
+      <br>
+      {{ form.hidden_tag() }}
+      <div class="eight wide field">
+        <label>{{ form.organism_name.label }}</label>
+        <input type="text" name="organism_name" placeholder="Organism Name">
+      </div>
+      <h4 class="ui divider header">{{ form.upload.label }}</h4>
+      <br>
+      <div class="container">
+        <div class="eight wide field">
+          <input type="file" name="upload">
+        </div>
+      </div>
+      <h4 class="ui divider header">{{ form.options.label }}</h4>
+      <div class="container main">
+        <div class="container first">
+          <div class="grouped fields">
+            {% for subfield in form.options %}
+            <div class="field">
+              <div class="ui radio checkbox">
+                {{ subfield }}
+                {{ subfield.label }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="container second">
+          <div class="grouped fields">
+            <div class="eight wide field">
+              <label>{{ form.gene.label }}</label>
+              <input type="text" name="gene" placeholder="Gene of Interest">
+            </div>
+            <div class="eight wide field">
+              <label>{{ form.basepairs.label }}</label>
+              <input type="text" name="basepairs" placeholder="1500">
+            </div>
+          </div>
+        </div>
+      </div>
+        {{ form.submit(class="ui blue button")}}
+    </form>
+  </section>
+<script type="text/javascript" src="{{url_for('static', filename='scripts/form.js')}}"></script>
+{% endblock %}
