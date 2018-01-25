@@ -1,31 +1,14 @@
 function draw(parsedData){
-  var svg = d3.select(".svg").append("svg")
+  var svgContainer = d3.select(".svg").append("svg")
               .attr("height", "100%")
               .attr("width", "100%");
+
+  console.log(parsedData)
 
   parsedData.sort(function(a, b){
     return a.Start - b.Start
   });
 
-function myPathForward(start, stop){
-    [{ "x" : xScale(start + 100), "y": xScale(start + 150)}, // straight left middle
-     {"x" : xScale(start + 100), "y": xScale(start + 100)}, // staight left top
-     {"x": xScale(stop + 300), "y": xScale(stop + 100)}, // top right
-     {"x": xScale(stop + 350), "y": xScale(stop + 150)}, // right pointy point
-     {"x": xScale(stop + 300), "y": xScale(stop + 200)}, // bottom right
-     {"x": xScale(start + 100), "y": xScale(start + 200)}, // straight bottom left
-     {"x": xScale(start + 100), "y": xScale(start + 150)}]; // Back to left
-    }
-
-function myPathBackward(start, stop){
-    [{"x" : xScale(start + 50), "y": xScale(start + 150) }, // left pointy bit
-     {"x" : xScale(start + 100), "y": xScale(start + 100) }, // left top
-     {"x": xScale(stop + 300), "y": xScale(stop + 100) }, // straight top right
-     {"x": xScale(stop + 300), "y": xScale(stop + 150) }, // right straight point
-     {"x": xScale(stop + 300), "y": xScale(stop + 200) }, // bottom right
-     {"x": xScale(start + 100), "y": xScale(start + 200) }, // straight bottom left
-     {"x": xScale(start+ 50),  "y": xScale(start + 150)}, ]  // Back to left
-    }
 
   // Define the x-axis horizontal
   var minValue = parsedData[0].Start;
@@ -33,42 +16,67 @@ function myPathBackward(start, stop){
 
   var xScale = d3.scaleLinear()
                        .domain([minValue, maxValue])
-                       .range([50, 1500])
+                       .range([50, 1000])
 
-  var lineFunction = d3.line()
-                       .x(function(d) {return d.x })
-                       .y(function(d) {return d.y })
-                       .curve(d3.curveBasics);
-
-for (var i = 0; i < parsedData.length; i++) {
-  console.log(parsedData[i]);
-}
-
-  var line = svg.selectAll("path")
+  var line = svgContainer.selectAll("line")
                 .data(parsedData)
-                .enter().append("svg:path")
+                .enter().append("svg:line")
+                .attr("x1", function(d, i){
+                  if(i== 0){
+                    return xScale(d.Start)
+                  }
+                  return xScale(100 + d.Start)})
+                .attr("y1", "100")
+                .attr("x2", function(d){ return xScale(d.Stop) })
+                .attr("y2", "100")
                 .attr("stroke", function(d){
-                  if(d.Strand == 1){
+                  if(d.Strand === 1){
                     return "#291B2C";
                   }else{
                     return "#CCA969";
                   };
                 })
-                .attr("stroke-width", 1.2)
-                .attr("opacity", 0.5)
-                .attr("fill", function(d){
-                  if(d.Strand == 1){
-                    return "#291B2C";
-                  }else{
-                    return "#CCA969";
-                  };
+                .attr("stroke-width", "15")
+                .attr("class","tooltip")
+                .style("pointer-event","all")
+                .append("svg:title")
+                .text(function(d){
+                  return "Gene: " + d.Gene + "\nLocus Tag: " + d.LocusTag + "\nProduct: " + d.Product;
                 })
-                .attr("d", function(d){
-                  if(d.Strand == 1){
-                    return lineFunction(myPathForward(d.Start, d.Stop));
-                  }else{
-                    return lineFunction(myPathBackward(d.Start, d.Stop));
-                  };
-                });
 
+
+  // tableCreate(parsedData);
+
+  }
+
+  function tableCreate(parsedData){
+
+    var myArray = ["Gene", "Locus tag", "Product"]
+
+    var tableDiv = document.getElementById('table');
+    var tbl = document.createElement('table');
+    tbl.style.width = "100%";
+    tbl.style.border = "1px solid black";
+    // var tRow = tbl.insertRow();
+    //
+    // for (var i = 0; i < myArray.length; i++) {
+    //   var tHead = tRow.insertCell();
+    //   tHead.appendChild(document.createTextNode(myArray[i]));
+    // }
+
+    for (var i = 0; i < parsedData.length; i++) {
+      var tr = tbl.insertRow();
+      for (var i = 0; i < myArray.length; i++) {
+        var th = tr.insertCell();
+        if(i == 0){
+          th.appendChild(document.createTextNode(parsedData[i].Gene));
+        }else if(i == 1){
+          th.appendChild(document.createTextNode(parsedData[i].LocusTag));
+        }else{
+          th.appendChild(document.createTextNode(parsedData[i].Product))
+        }
+      }
+    }
+
+  tableDiv.appendChild(tbl);
   }

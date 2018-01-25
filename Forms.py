@@ -10,6 +10,6 @@ class InfoForm(Form):
     basepairs = IntegerField('Number of Bases', default=1500)
     upload = FileField('File Upload', validators=[
         FileRequired(),
-        FileAllowed(['gb','gbk'], 'Genbank Only'),
+        FileAllowed(['gb','gbk', 'gbff'], 'Genbank Only'),
         DataRequired("Please upload a Genbank File")])
     submit = SubmitField('Submit')

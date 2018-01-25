@@ -72,17 +72,17 @@ class CircularGenome():
         """
         return self._size
 
-    def giveNode(self, type, s, b):
+    def giveNode(self, typ, s, b):
         """
             returns a list of all neighbouring genes within specified range
         """
         node_list = []
 
-        if type is 1:
+        if typ is 1:
             p = self.__search_by_locus(s)
-        elif type is 2:
+        elif typ is 2:
             p = self.__search_by_gene(s)
-        elif type is 3:
+        elif typ is 3:
             p = self.__search_by_id(s)
         else:
             p = self.__search_by_prod(s)

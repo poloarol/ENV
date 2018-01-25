@@ -61,11 +61,24 @@ html, body{
   clear: both;
 }
 
+.table,
 .svg{
   position: relative;
   top: 8em;
   width: 80%;
   display: table;
   margin: 0 auto;
-  background-color: grey;
+}
+
+.table{
+  text-align: center;
+}
+
+#err{
+  position: relative;
+  top: 15%;
+  width: 80%;
+  display: table;
+  margin: 0 auto;
+  text-align: center;
 }

@@ -1,3 +1,5 @@
+import sys
+
 from collections import namedtuple
 
 from Bio import SeqIO
@@ -57,9 +59,10 @@ class ReadFile():
 
     def get_gene(self, search_type, parameter, bases):
         gene_set = GENOME.giveNode(search_type, parameter, bases)
-        if(isinstance(gene_set, str)):
+        if isinstance(gene_set, list):
+            c = []
+            for i in range(len(gene_set)):
+                c.append(gene_set[i].serialize())
+            return c
+        else:
             return gene_set
-        c = []
-        for i in range(len(gene_set)):
-            c.append(gene_set[i].serialize())
-        return c

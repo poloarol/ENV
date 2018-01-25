@@ -138,7 +138,7 @@ class Gene():
         return {
             "Gene" : self.get_gene_name(),
             "Product" : self.get_product(),
-            "Locus Tag" : self.get_locus_tag(),
+            "LocusTag" : self.get_locus_tag(),
             "Start" : self.get_start(),
             "Stop" : self.get_stop(),
             "Strand" : self.get_strand(),
