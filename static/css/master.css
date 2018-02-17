@@ -61,17 +61,15 @@ html, body{
   clear: both;
 }
 
-.table,
 .svg{
+  display: inline-block;
   position: relative;
   top: 8em;
-  width: 80%;
   display: table;
   margin: 0 auto;
-}
-
-.table{
-  text-align: center;
+  width: 85%;
+  vertical-align: top;
+  overflow: hidden;
 }
 
 #err{
