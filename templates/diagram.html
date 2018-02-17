@@ -9,7 +9,7 @@
   var gene = '{{ gene|tojson }}'
   var parsed = JSON.parse(gene);
   window.addEventListener('load', function(){
-    draw(parsed), false})
+    trimData(parsed), false})
 </script>
 
 {% endblock %}
