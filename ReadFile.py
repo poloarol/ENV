@@ -52,17 +52,16 @@ class ReadFile():
                 strand = feature.strand
                 start = feature.location.start.position
                 stop = feature.location.end.position
-                gene = Gene(locus_tag, gen, start, stop, codon_start, table, product, protein_id, translation, strand)  # noqa
-                data = Info(locus=locus_tag, gene=gen, protein_id=protein_id, product=product, length=stop-start)  # noqa
-                GENOME.add_node(data, gene)  # noqa
+                gene = Gene(locus_tag, gen, start, stop, codon_start, \
+                            table, product, protein_id, translation, strand)
+                key = Info(locus=locus_tag, gene=gen, protein_id=protein_id, \
+                           product=product, length=stop-start)
+                GENOME.add(key, gene)  # noqa
 
 
     def get_gene(self, search_type, parameter, bases):
-        gene_set = GENOME.giveNode(search_type, parameter, bases)
-        if isinstance(gene_set, list):
-            c = []
-            for i in range(len(gene_set)):
-                c.append(gene_set[i].serialize())
-            return c
+        genes = GENOME.findGene(int(search_type), parameter, basePairs=2500)
+        if genes:
+            return [gene.serialize() for gene in genes]
         else:
-            return gene_set
+            return genes

@@ -14,120 +14,27 @@ class Gene():
     """
 
     def __init__(self, locus_tag="N/A", gene="N/A", start=0, stop=0, codon_start=0, table=0, product="N/A", protein_id="N/A", translation="N/A", strand=0):  # noqa
-        self.__locus_tag = locus_tag
-        self.__start = start
-        self.__stop = stop
-        self.__codon_start = codon_start
-        self.__table = table
-        self.__product = product
-        self.__protein_id = protein_id
-        self.__translation = translation
-        self.__strand = strand
-        self.__gene_name = gene
-
-    def set_locus_tag(self, locus):
-        """
-            (String) -> None
-            Assigns a locus tag to the gene
-        """
-        self.__locus_tag = locus
-
-    def set_codon_start(self, codon_start):
-        """
-            (String) -> None
-            Assigns a codon_start to the gene
-        """
-        self.__codon_start = codon_start
-
-    def set_trans_table(self, table):
-        """
-            (String) -> None
-            Assigns a translation table to the gene
-        """
-        self.__table = table
-
-    def set_gene_name(self, gene):
-        """
-            (String) -> None
-            Assigns a gene name to the gene
-        """
-        self.__gene_name = gene
-
-    def get_length(self):
-        """
-            (None) -> int
-            Returns the length of a gene
-        """
-        return self.get_stop() - self.get_start()
-
-    def get_locus_tag(self):
-        """
-            returns the locus tag
-        """
-        return self.__locus_tag
-
-    def get_start(self):
-        """
-            returns the start position
-        """
-        return self.__start
-
-    def get_stop(self):
-        """
-            returns the stop position
-        """
-        return self.__stop
-
-    def get_gene_name(self):
-        """
-            returns the gene name
-        """
-        return self.__gene_name
-
-    def get_codon_start(self):
-        """
-            returns the codon_start
-        """
-        return self.__codon_start
-
-    def get_transl_table(self):
-        """
-            returns the transl_table
-        """
-        return self.__table
-
-    def get_product(self):
-        """
-            returns the product name
-        """
-        return self.__product
-
-    def get_protein(self):
-        """
-            returns the protein id
-        """
-        return self.__protein_id
-
-    def get_translation(self):
-        """
-            returns the translation
-        """
-        return self.__translation
-
-    def get_strand(self):
-        """
-            returns the strand(sense(1) or antisense(-1))
-        """
-        return self.__strand
+        self.locus_tag = locus_tag
+        self.start = start
+        self.stop = stop
+        self.codon_start = codon_start
+        self.table = table
+        self.product = product
+        self.protein_id = protein_id
+        self.translation = translation
+        self.strand = strand
+        self.gene_name = gene
 
 
     def record(self):
         """
             Returns a record of a gene to be written to a genbank file
         """
-        sequence = Seq(self.get_translation(), IUPAC.protein)
-        rec = SeqRecord(sequence, id=self.get_protein(), name=self.get_locus_tag(),                     description=self.get_gene_name())  # noqa
-        loc = SeqFeature(FeatureLocation(self.get_start(), self.get_stop()), type="CDS", strand=self.get_strand())  # noqa
+        sequence = Seq(self.translation, IUPAC.protein)
+        rec = SeqRecord(sequence, id=self.protein_id, name=self.locus_tag, \
+                        description=self.gene_name)
+        loc = SeqFeature(FeatureLocation(self.start, self.stop), \
+                         type="CDS", strand=self.strand)
         rec.features.append(loc)
         return rec
 
@@ -136,10 +43,21 @@ class Gene():
             Returns gene information as a json
         """
         return {
-            "Gene" : self.get_gene_name(),
-            "Product" : self.get_product(),
-            "LocusTag" : self.get_locus_tag(),
-            "Start" : self.get_start(),
-            "Stop" : self.get_stop(),
-            "Strand" : self.get_strand(),
+            "Gene" : self.gene_name,
+            "Product" : self.protein_id,
+            "LocusTag" : self.locus_tag,
+            "Start" : self.start,
+            "Stop" : self.stop,
+            "Strand" : self.strand
         }
+
+    def __repr__(self):
+        return "<Gene class - Gene Name:{0}, Product:{1}, Locus Tag:{2}> \
+        ProteinID: {3} ,Position: ({4}, {5}) Strand:{6}".format(
+            self.gene_name, self.product, self.locus_tag, self.protein_id, self.start, self.stop, self.strand
+                                                )
+
+    def __str__(self):
+        return "Gene: ({0}, {1}, {2}, {3}, {4}, {5})".format(
+            self.gene_name, self.product, self.locus_tag, self.start, self.stop, self.strand
+                                                )

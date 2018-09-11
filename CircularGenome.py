@@ -1,144 +1,167 @@
 from collections import namedtuple
 
+import itertools
 
 class CircularGenome():
     """
-        Circular bidirectional linkedlist to simulate bacterial genome
+        Dictionary used with itertools in order to mimmick the properties of
+        a bacterial genome genome. NamedTuples used as keys for the purpose
+        of searching a gene
     """
 
-    class __Node(object):
-        """
-            Node class
-        """
-
-        __obj = 'details', '_data', '_prev', '_next'
-        __info = '_locus', '_gene', '_product', '_protein_id', '_len'
-
-        def __init__(self, Info, data, prev, next):
-            self._locus = Info.locus
-            self._gene = Info.gene
-            self._protein_id = Info.protein_id
-            self._product = Info.product
-            self._len = Info.length
-            self._data = data
-            self._prev = prev
-            self._next = next
-
     def __init__(self):
-        Info = namedtuple('Info', 'locus, gene, protein_id, product, length')
-        # Info serves a key
-        self._head = self.__Node(Info, None, None, None)
-        self._tail = self.__Node(Info, None, None, None)
-        self._head._next = self._tail
-        self._tail._prev = self._head
-        self._size = 0
+        self.Info = namedtuple('Info', 'locus, gene, protein_id, product, length')
+        self.genome = {}
 
-    def _behind(self):
-        """
-            returns the previous element in the list. If the previous is
-            the head, returns the head.previous
-        """
-        if(self._prev is self._head):
-            return self._head._prev
-        return self._prev
-
-    def add_node(self, d, e):
+    def add(self, key, value):
         """
             method which add a key and node to the linkedlist
         """
-        global p
-        if self.is_empty():
-            p = self.__Node(d, e, self._head, self._head)
-            self._head._next = p
-            self._head._prev = p
+        self.key = self.Info(key.locus, key.gene, key.protein_id, key.product, key.length)
+        self.genome[self.key] = value
+        self.LOCUS = 1
+        self.GENE = 2
+        self.ID = 3
+
+    def findGene(self, option, value, basePairs):
+        """
+            method enables to locate the presence of a gene in the Dictionary
+            via the created namd namedtuple
+        """
+
+        if option == self.LOCUS:
+            for main_key in self.genome.keys():
+                print(main_key)
+                if value == main_key.locus:
+                    return self.__createPathway__(value, main_key, option, basePairs)
+        elif option == self.GENE:
+            for main_key in self.genome.keys():
+                print(main_key)
+                if value == main_key.gene:
+                    return self.__createPathway__(value, main_key, option, basePairs)
+        elif option == self.ID:
+            for main_key in self.genome.keys():
+                if value == main_key.protein_id:
+                    return self.__createPathway__(value, main_key, option, basePairs)
         else:
-            p = self._head
-            while p._next is not self._head:
-                p = p._next
-            p._next = self.__Node(d, e, p, self._head)
-            self._head._prev = p._next
-        self._size += 1
-        return p._data
+            for main_key in self.genome.keys():
+                if value == main_key.product:
+                    return self.__createPathway__(value, main_key, option, basePairs)
 
-    def is_empty(self):
-        """
-         checks if the list is empty
-        """
-        return self.size() == 0
+        return False
 
-    def size(self):
-        """
-         gives the size of the list
-        """
-        return self._size
+    def __createPathway__(self, key, main_key, option, basePairs):
+        left = self.__leftPathway__(key, option, basePairs)
+        right = self.__rightPathway__(key, option, basePairs)
+        left.append(self.genome[main_key])
+        left.extend(right)
+        return left
 
-    def giveNode(self, typ, s, b):
-        """
-            returns a list of all neighbouring genes within specified range
-        """
-        node_list = []
-
-        if typ is 1:
-            p = self.__search_by_locus(s)
-        elif typ is 2:
-            p = self.__search_by_gene(s)
-        elif typ is 3:
-            p = self.__search_by_id(s)
+    def __rightPathway__(self, key, option, basePairs):
+        pathway = itertools.cycle(self.genome)
+        if option is self.LOCUS:
+            return self.__locus__(key, option, basePairs, pathway)
+        elif option is self.GENE:
+            return self.__gene__(key, option, basePairs, pathway)
+        elif option is self.ID:
+            return self.__protein__(key, option, basePairs, pathway)
         else:
-            p = self.__search_by_prod(s)
+            return self.__product__(key, option, basePairs, pathway)
 
-        if p is False:
-            return "Item can't be found"
+    def __leftPathway__(self, key, option, basePairs):
+        get_pathway_keys = list(itertools.chain(self.genome))
+        # reverse order in order to pass in opposite direction
+        get_pathway_keys.reverse()
+        reverse_pathway = itertools.cycle(get_pathway_keys)
+        if option is self.LOCUS:
+            return self.__locus__(key, option, basePairs, reverse_pathway)
+        elif option is self.GENE:
+            return self.__gene__(key, option, basePairs, reverse_pathway)
+        elif option is self.ID:
+            return self.__protein__(key, option, basePairs, reverse_pathway)
+        else:
+            return self.__protein__(key, option, basePairs, reverse_pathway)
 
-        p_ahead = p_behind = p
-        length_ahead = length_behind = 0
 
-        while length_ahead <= b:
-            p_ahead = p_ahead._next
-            if p_ahead is self._head:
-                p_ahead = self._head._next
-            node_list.append(p_ahead._data)
-            length_ahead += p_ahead._len
+    def __locus__(self, key, option, basePairs, pathway):
+        sum = 0
+        started = False
+        created_pathway = list()
+        val = self.Info(None, None, None, None, None)
+        while(sum < basePairs):
+            val = next(pathway)
+            if started:
+                created_pathway.append(self.genome[val])
+                sum += val.length
+            elif sum >= basePairs:
+                break
+            elif key == val.locus and started:
+                break
+            elif key == val.locus:
+                started = True
+            else:
+                pass
+        return created_pathway
 
-        while length_behind <= b:
-            p_behind = p_behind._prev
-            if p_behind is self._head:
-                p_behind = self._head._prev
-            node_list.append(p_behind._data)
-            length_behind += p_behind._len
 
-        node_list.append(p._data)
+    def __gene__(self, key, option, basePairs, pathway):
+        sum = 0
+        started = False
+        created_pathway = list()
+        val = self.Info(None, None, None, None, None)
+        while(sum < basePairs):
+            val = next(pathway)
+            print(val)
+            if started:
+                created_pathway.append(self.genome[val])
+                sum += val.length
+            elif sum >= basePairs:
+                break
+            elif key == val.gene and started:
+                break
+            elif key == val.gene:
+                started = True
+            else:
+                pass
+        return created_pathway
 
-        return node_list
+    def __protein__(self, key, option, basePairs, pathway):
+        sum = 0
+        started = False
+        created_pathway = list()
+        val = self.Info(None, None, None, None, None)
+        while(sum < basePairs):
+            val = next(pathway)
+            if started:
+                created_pathway.append(self.genome[val])
+                sum += val.length
+            elif sum >= basePairs:
+                break
+            elif key == val.protein_id and started:
+                break
+            elif key == val.protein_id:
+                started = True
+            else:
+                pass
+        return created_pathway
 
-    def __search_by_locus(self, s):
-        p = self._head._next
-        while p._locus != s:
-            p = p._next
-            if p is self._head:
-                return False
-        return p
-
-    def __search_by_gene(self, s):
-        p = self._head._next
-        while p._gene != s:
-            p = p._next
-            if p is self._head:
-                return False
-        return p
-
-    def __search_by_id(self, s):
-        p = self._head._next
-        while p._protein != s:
-            p = p._next
-            if p is self._head:
-                return False
-        return p
-
-    def __search_by_prod(self, s):
-        p = self._head._next
-        while p._product != s:
-            p = p._next
-            if p is self._head:
-                return False
-        return p
+    def __product__(self, key, option, basePairs, pathway):
+        sum = 0
+        started = False
+        created_pathway = list()
+        val = self.Info(None, None, None, None, None)
+        while(sum < basePairs):
+            val = next(pathway)
+            sum += val.length
+            if started:
+                created_pathway.append(self.genome[val])
+                sum += val.length
+            elif sum >= basePairs:
+                break
+            elif key == val.product and started:
+                break
+            elif key == val.product:
+                started = True
+            else:
+                pass
+        return created_pathway

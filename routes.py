@@ -45,10 +45,9 @@ def mapping():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 readFile = ReadFile(os.path.join(UPLOAD_FOLDER, filename))
                 gene = readFile.get_gene(option, gene, int(basepairs))
-
-                if isinstance(gene, list):
+                if gene:
                     return redirect(url_for('diagram'))
-                elif isinstance(gene, str):
+                else:
                     return redirect(url_for('page_not_found'))
         else:
             return render_template('map.html', form=form)
@@ -65,7 +64,6 @@ def phylo():
 
 @app.route("/error-404")
 def page_not_found():
-    global option
     value = chosen_option(option)
     return render_template('error-404.html', value = value)
 
@@ -74,4 +72,4 @@ def chosen_option(key):
     return dict.get(key)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
