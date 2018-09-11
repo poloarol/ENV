@@ -59,9 +59,10 @@ class ReadFile():
                 GENOME.add(key, gene)  # noqa
 
 
-    def get_gene(self, search_type, parameter, bases):
-        genes = GENOME.findGene(int(search_type), parameter, basePairs=2500)
-        if genes:
+    def get_gene(self, search_type, parameter):
+        bool_search = GENOME.findGene(int(search_type), parameter)
+        if (bool_search):
+            genes = GENOME.createPathway(parameter, option, basePairs)
             return [gene.serialize() for gene in genes]
         else:
-            return genes
+            return bool_search

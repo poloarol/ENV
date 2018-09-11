@@ -12,6 +12,7 @@ class CircularGenome():
     def __init__(self):
         self.Info = namedtuple('Info', 'locus, gene, protein_id, product, length')
         self.genome = {}
+        self.key = self.Info(None, None, None, None)
 
     def add(self, key, value):
         """
@@ -23,7 +24,7 @@ class CircularGenome():
         self.GENE = 2
         self.ID = 3
 
-    def findGene(self, option, value, basePairs):
+    def findGene(self, option, value):
         """
             method enables to locate the presence of a gene in the Dictionary
             via the created namd namedtuple
@@ -33,57 +34,65 @@ class CircularGenome():
             for main_key in self.genome.keys():
                 print(main_key)
                 if value == main_key.locus:
-                    return self.__createPathway__(value, main_key, option, basePairs)
+                    self.key = main_key
+                    return True
         elif option == self.GENE:
             for main_key in self.genome.keys():
                 print(main_key)
                 if value == main_key.gene:
-                    return self.__createPathway__(value, main_key, option, basePairs)
+                    self.key = main_key
+                    return True
         elif option == self.ID:
             for main_key in self.genome.keys():
                 if value == main_key.protein_id:
-                    return self.__createPathway__(value, main_key, option, basePairs)
+                    self.key = main_key
+                    return True
         else:
             for main_key in self.genome.keys():
                 if value == main_key.product:
-                    return self.__createPathway__(value, main_key, option, basePairs)
+                    self.key = main_key
+                    return True
 
         return False
 
-    def __createPathway__(self, key, main_key, option, basePairs):
-        left = self.__leftPathway__(key, option, basePairs)
-        right = self.__rightPathway__(key, option, basePairs)
+    def createPathway(self, value, option, basePairs):
+        return self.__createPathway(value, self.key, option, basePairs)
+
+
+    def __createPathway(self, key, main_key, option, basePairs):
+        left = self.__leftPathway(key, option, basePairs)
+        right = self.__rightPathway(key, option, basePairs)
         left.append(self.genome[main_key])
         left.extend(right)
         return left
 
-    def __rightPathway__(self, key, option, basePairs):
+    def __rightPathway(self, key, option, basePairs):
         pathway = itertools.cycle(self.genome)
         if option is self.LOCUS:
-            return self.__locus__(key, option, basePairs, pathway)
+            return self.__locus(key, option, basePairs, pathway)
         elif option is self.GENE:
-            return self.__gene__(key, option, basePairs, pathway)
+            return self.__gene(key, option, basePairs, pathway)
         elif option is self.ID:
-            return self.__protein__(key, option, basePairs, pathway)
+            return self.__protein(key, option, basePairs, pathway)
         else:
-            return self.__product__(key, option, basePairs, pathway)
+            return self.__product(key, option, basePairs, pathway)
 
-    def __leftPathway__(self, key, option, basePairs):
+    def __leftPathway(self, key, option, basePairs):
         get_pathway_keys = list(itertools.chain(self.genome))
         # reverse order in order to pass in opposite direction
         get_pathway_keys.reverse()
         reverse_pathway = itertools.cycle(get_pathway_keys)
         if option is self.LOCUS:
-            return self.__locus__(key, option, basePairs, reverse_pathway)
+            return self.__loc(key, option, basePairs, reverse_pathway)
         elif option is self.GENE:
-            return self.__gene__(key, option, basePairs, reverse_pathway)
+            return self.__ge(key, option, basePairs, reverse_pathway)
         elif option is self.ID:
-            return self.__protein__(key, option, basePairs, reverse_pathway)
+            return self.__prote(key, option, basePairs, reverse_pathway)
         else:
-            return self.__protein__(key, option, basePairs, reverse_pathway)
+            return self.__prote(key, option, basePairs, reverse_pathway)
 
 
-    def __locus__(self, key, option, basePairs, pathway):
+    def __locus(self, key, option, basePairs, pathway):
         sum = 0
         started = False
         created_pathway = list()
@@ -104,7 +113,7 @@ class CircularGenome():
         return created_pathway
 
 
-    def __gene__(self, key, option, basePairs, pathway):
+    def __gene(self, key, option, basePairs, pathway):
         sum = 0
         started = False
         created_pathway = list()
@@ -125,7 +134,7 @@ class CircularGenome():
                 pass
         return created_pathway
 
-    def __protein__(self, key, option, basePairs, pathway):
+    def __protein(self, key, option, basePairs, pathway):
         sum = 0
         started = False
         created_pathway = list()
@@ -145,7 +154,7 @@ class CircularGenome():
                 pass
         return created_pathway
 
-    def __product__(self, key, option, basePairs, pathway):
+    def __product(self, key, option, basePairs, pathway):
         sum = 0
         started = False
         created_pathway = list()
