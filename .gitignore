@@ -1,3 +1,6 @@
 __pycache__
 .DS_Store
 venv
+trial.py 
+.vscode
+.mypy_cache

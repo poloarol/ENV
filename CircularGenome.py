@@ -1,35 +1,32 @@
-from collections import namedtuple
+"""Inserts key-value pairs for genes and their indentifiers and allow for searching, which produced a list of all genes around it by a certain amt of bp."""
 
+from collections import namedtuple
 import itertools
 
 class CircularGenome():
     """
-        Dictionary used with itertools in order to mimmick the properties of
-        a bacterial genome genome. NamedTuples used as keys for the purpose
-        of searching a gene
+    Dictionary used with itertools in order to mimmick the properties of a bacterial genome genome.
+    
+    NamedTuples used as keys for the purpose of searching a gene.
     """
 
     def __init__(self):
+        """Initialize the genome with its key values when called."""
         self.Info = namedtuple('Info', 'locus, gene, protein_id, product, length')
         self.genome = {}
         self.key = self.Info(None, None, None, None)
-
-    def add(self, key, value):
-        """
-            method which add a key and node to the linkedlist
-        """
-        self.key = self.Info(key.locus, key.gene, key.protein_id, key.product, key.length)
-        self.genome[self.key] = value
         self.LOCUS = 1
         self.GENE = 2
         self.ID = 3
 
-    def findGene(self, option, value):
-        """
-            method enables to locate the presence of a gene in the Dictionary
-            via the created namd namedtuple
-        """
+    def add(self, key, value):
+        """Add a new item to the dictionary."""
+        self.key = self.Info(key.locus, key.gene, key.protein_id, key.product, key.length)
+        self.genome[self.key] = value
+    
 
+    def findGene(self, option, value):
+        """Enable to locate the presence of a gene in the Dictionary via the created namd namedtuple."""
         if option == self.LOCUS:
             for main_key in self.genome.keys():
                 print(main_key)
@@ -56,10 +53,12 @@ class CircularGenome():
         return False
 
     def createPathway(self, value, option, basePairs):
+        """After haven found a gene exist in the genome, You create a pathway with genes +/- bp."""
         return self.__createPathway(value, self.key, option, basePairs)
 
 
     def __createPathway(self, key, main_key, option, basePairs):
+        """Create the pathway."""
         left = self.__leftPathway(key, option, basePairs)
         right = self.__rightPathway(key, option, basePairs)
         left.append(self.genome[main_key])
@@ -67,6 +66,7 @@ class CircularGenome():
         return left
 
     def __rightPathway(self, key, option, basePairs):
+        """Create the rightpathway."""
         pathway = itertools.cycle(self.genome)
         if option is self.LOCUS:
             return self.__locus(key, option, basePairs, pathway)
@@ -78,6 +78,7 @@ class CircularGenome():
             return self.__product(key, option, basePairs, pathway)
 
     def __leftPathway(self, key, option, basePairs):
+        """Create the leftpathway."""
         get_pathway_keys = list(itertools.chain(self.genome))
         # reverse order in order to pass in opposite direction
         get_pathway_keys.reverse()

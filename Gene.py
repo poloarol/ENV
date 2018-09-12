@@ -1,3 +1,5 @@
+"""Definition of properties and attibutes of a gene."""
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
@@ -5,15 +7,10 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 
 
 class Gene():
-
-    """
-    Gene:
-        Class which stores all the information about a gene from GenBank file
-        locus_tag, note, translation, protein_id, product are all set to N/A by
-        default and start, stop, codon_start, transl_table and strand are 0
-    """
+    """Stores all necessary information to recognise a gene."""
 
     def __init__(self, locus_tag="N/A", gene="N/A", start=0, stop=0, codon_start=0, table=0, product="N/A", protein_id="N/A", translation="N/A", strand=0):  # noqa
+        """Attibutes necessary to make a represent a gene class."""
         self.locus_tag = locus_tag
         self.start = start
         self.stop = stop
@@ -27,9 +24,7 @@ class Gene():
 
 
     def record(self):
-        """
-            Returns a record of a gene to be written to a genbank file
-        """
+        """Create a genbank file for a single gene."""
         sequence = Seq(self.translation, IUPAC.protein)
         rec = SeqRecord(sequence, id=self.protein_id, name=self.locus_tag, \
                         description=self.gene_name)
@@ -39,9 +34,7 @@ class Gene():
         return rec
 
     def serialize(self):
-        """
-            Returns gene information as a json
-        """
+        """Create a json/dictionary representation of gene."""
         return {
             "Gene" : self.gene_name,
             "Product" : self.protein_id,
@@ -52,12 +45,14 @@ class Gene():
         }
 
     def __repr__(self):
+        """Class representation of gene for debugging purposes."""
         return "<Gene class - Gene Name:{0}, Product:{1}, Locus Tag:{2}> \
         ProteinID: {3} ,Position: ({4}, {5}) Strand:{6}".format(
             self.gene_name, self.product, self.locus_tag, self.protein_id, self.start, self.stop, self.strand
                                                 )
 
     def __str__(self):
+        """Class Human readable representation of string (toString)."""
         return "Gene: ({0}, {1}, {2}, {3}, {4}, {5})".format(
             self.gene_name, self.product, self.locus_tag, self.start, self.stop, self.strand
                                                 )

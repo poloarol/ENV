@@ -1,25 +1,25 @@
+"""Proceses a Genbank file and allows for searching, if a pathway exists."""
+
 import sys
 
 from collections import namedtuple
-
 from Bio import SeqIO
-
 from CircularGenome import CircularGenome
 from Gene import Gene
 
 
 class ReadFile():
-    """
-
-    """
+    """Reads a Genbank file and processes it."""
 
     def __init__(self, filename):
+        """Initialize the Circular genome and read the files."""
         global GENOME
         GENOME = CircularGenome()
         self.record = SeqIO.read(filename, "genbank")
         self.parse_file(self.record)
 
     def paran(self, my_list):
+        """Remove the parantheses around the various identifiers."""
         ret = ""
         for i in range(len(my_list)):
             if my_list[i] != '[' or my_list[i] != ']':
@@ -27,6 +27,7 @@ class ReadFile():
         return ret
 
     def parse_file(self, record):
+        """Parse the file and creates the Genome."""
         locus_tag = product = protein_id = translation = gen = "N/A"
         start = stop = codon_start = table = strand = 0
         Info = namedtuple('Info', 'locus, gene, protein_id, product, length')
@@ -56,10 +57,11 @@ class ReadFile():
                             table, product, protein_id, translation, strand)
                 key = Info(locus=locus_tag, gene=gen, protein_id=protein_id, \
                            product=product, length=stop-start)
-                GENOME.add(key, gene)  # noqa
+                GENOME.add(key, gene)
 
 
     def get_gene(self, search_type, parameter):
+        """Search if gene on interest exist at specifed location and create the sub-pathway."""
         bool_search = GENOME.findGene(int(search_type), parameter)
         if (bool_search):
             genes = GENOME.createPathway(parameter, option, basePairs)

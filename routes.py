@@ -18,15 +18,18 @@ name = ''
 option = ''
 
 def allowed_file(filename):
+    """Define the allowd files to be uploaded."""
     return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
 @app.route("/")
 def index():
+    """Entry page of the program."""
     return render_template('index.html')
 
 @app.route("/GenomeMap", methods=['GET','POST'])
 def mapping():
+    """Read and allow the creation of the sub-pathway."""
     form = InfoForm()
     global gene
     global name
@@ -55,19 +58,23 @@ def mapping():
 
 @app.route("/Diagram")
 def diagram():
+    """Draws the pathway if the gene of interest was found."""
     return render_template('diagram.html', name=name, gene=gene)
 
 
 @app.route("/Phylogeny")
 def phylo():
+    """Creates a phylogenetic tree based on inputed data."""
     return render_template("phylo.html")
 
 @app.route("/error-404")
 def page_not_found():
+    """If gene of interest not found, show error message."""
     value = chosen_option(option)
     return render_template('error-404.html', value = value)
 
 def chosen_option(key):
+    """Based on search criteria, provide users with which criterion they chose to enable them proof read again before submitting."""
     dict = {'1':'Locus Tag', '2':'Gene', '3':'Protein ID', '4':'Product'}
     return dict.get(key)
 
