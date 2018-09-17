@@ -1,0 +1,52 @@
+---
+version: 1
+disable_existing_loggers: False
+formatters:
+  simple: 
+    format: "%(levelname)*8s | %(asctime)s | %(name)-18s | %(message)s"
+handlers:
+  debug_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: simple
+    # log file path prepended during runtime
+    filename: 0_debug.log
+    maxBytes: 250000000 #250MB
+    backupCount: 20
+    encoding: utf-8
+  info_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: simple
+    # log file path prepended during runtime
+    filename: 1_info.log
+    maxBytes: 250000000 #250MB
+    backupCount: 20
+    encoding: utf-8
+  warning_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: WARNING
+    formatter: simple
+    # log file path prepended during runtime
+    filename: 2_warning.log
+    maxBytes: 250000000 #250MB
+    backupCount: 20
+    encoding: utf-8
+  error_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: simple
+    # log file path prepended during runtime
+    filename: 3_error_critical.log
+    maxBytes: 250000000 #250MB
+    backupCount: 20
+    encoding: utf-8
+loggers:
+  my_module:
+    level: ERROR
+    handlers: [debug_file_handler]
+    propagates: no
+roor:
+  level: DEBUG
+  handlers: [debug_file_handler, info_file_handler, warning_file_handler, error_file_handler]
+. . .

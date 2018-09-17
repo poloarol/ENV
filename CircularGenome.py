@@ -1,7 +1,8 @@
 """Inserts key-value pairs for genes and their indentifiers and allow for searching, which produced a list of all genes around it by a certain amt of bp."""
 
-from collections import namedtuple
 import itertools
+from collections import namedtuple
+from typing import Any, List, Dict, Optional, NamedTuple, Iterator
 
 class CircularGenome():
     """
@@ -13,61 +14,60 @@ class CircularGenome():
     def __init__(self):
         """Initialize the genome with its key values when called."""
         self.Info = namedtuple('Info', 'locus, gene, protein_id, product, length')
-        self.genome = {}
-        self.key = self.Info(None, None, None, None)
-        self.LOCUS = 1
-        self.GENE = 2
-        self.ID = 3
+        self.genome: Dict = {}
+        self.key: Info = self.Info(None, None, None, None, None)
+        self.LOCUS: int = 1
+        self.GENE: int = 2
+        self.ID: int = 3
 
-    def add(self, key, value):
+    def add(self, key, value) -> None:
         """Add a new item to the dictionary."""
-        self.key = self.Info(key.locus, key.gene, key.protein_id, key.product, key.length)
-        self.genome[self.key] = value
+        cle = self.Info(key.locus, key.gene, key.protein_id, key.product, key.length)
+        self.genome[cle] = value
     
 
-    def findGene(self, option, value):
+    def findGene(self, option: int, value: str) -> bool:
         """Enable to locate the presence of a gene in the Dictionary via the created namd namedtuple."""
+        FOUND = True
+        NOT_FOUND = False
         if option == self.LOCUS:
             for main_key in self.genome.keys():
-                print(main_key)
                 if value == main_key.locus:
                     self.key = main_key
-                    return True
+                    return FOUND
         elif option == self.GENE:
             for main_key in self.genome.keys():
-                print(main_key)
                 if value == main_key.gene:
                     self.key = main_key
-                    return True
+                    return FOUND
         elif option == self.ID:
             for main_key in self.genome.keys():
                 if value == main_key.protein_id:
-                    self.key = main_key
-                    return True
+                    return FOUND
         else:
             for main_key in self.genome.keys():
                 if value == main_key.product:
                     self.key = main_key
-                    return True
+                    return FOUND
 
-        return False
+        return NOT_FOUND
 
-    def createPathway(self, value, option, basePairs):
+    def createPathway(self, value: str, option: int, basePairs: int) -> List:
         """After haven found a gene exist in the genome, You create a pathway with genes +/- bp."""
-        return self.__createPathway(value, self.key, option, basePairs)
+        return self.__createPathway(value, option, basePairs)
 
 
-    def __createPathway(self, key, main_key, option, basePairs):
+    def __createPathway(self, key: str, option: int, basePairs: int) -> List:
         """Create the pathway."""
         left = self.__leftPathway(key, option, basePairs)
         right = self.__rightPathway(key, option, basePairs)
-        left.append(self.genome[main_key])
+        left.append(self.genome[self.key])
         left.extend(right)
         return left
 
-    def __rightPathway(self, key, option, basePairs):
+    def __rightPathway(self, key: str, option: int, basePairs: int) -> List:
         """Create the rightpathway."""
-        pathway = itertools.cycle(self.genome)
+        pathway: Iterator = itertools.cycle(self.genome)
         if option is self.LOCUS:
             return self.__locus(key, option, basePairs, pathway)
         elif option is self.GENE:
@@ -77,26 +77,26 @@ class CircularGenome():
         else:
             return self.__product(key, option, basePairs, pathway)
 
-    def __leftPathway(self, key, option, basePairs):
+    def __leftPathway(self, key: str, option: int, basePairs: int) -> List:
         """Create the leftpathway."""
-        get_pathway_keys = list(itertools.chain(self.genome))
+        get_pathway_keys: List = list(itertools.chain(self.genome))
         # reverse order in order to pass in opposite direction
         get_pathway_keys.reverse()
-        reverse_pathway = itertools.cycle(get_pathway_keys)
+        reverse_pathway: Iterator = itertools.cycle(get_pathway_keys)
         if option is self.LOCUS:
-            return self.__loc(key, option, basePairs, reverse_pathway)
+            return self.__locus(key, option, basePairs, reverse_pathway)
         elif option is self.GENE:
-            return self.__ge(key, option, basePairs, reverse_pathway)
+            return self.__gene(key, option, basePairs, reverse_pathway)
         elif option is self.ID:
-            return self.__prote(key, option, basePairs, reverse_pathway)
+            return self.__protein(key, option, basePairs, reverse_pathway)
         else:
-            return self.__prote(key, option, basePairs, reverse_pathway)
+            return self.__product(key, option, basePairs, reverse_pathway)
 
 
-    def __locus(self, key, option, basePairs, pathway):
-        sum = 0
-        started = False
-        created_pathway = list()
+    def __locus(self, key: str, option: int, basePairs: int, pathway: Iterator) -> List:
+        sum: int = 0
+        started: bool = False
+        created_pathway: List = list()
         val = self.Info(None, None, None, None, None)
         while(sum < basePairs):
             val = next(pathway)
@@ -114,14 +114,13 @@ class CircularGenome():
         return created_pathway
 
 
-    def __gene(self, key, option, basePairs, pathway):
-        sum = 0
-        started = False
-        created_pathway = list()
+    def __gene(self, key: str, option: int, basePairs: int, pathway: Iterator) -> List:
+        sum: int = 0
+        started: bool = False
+        created_pathway: List = list()
         val = self.Info(None, None, None, None, None)
         while(sum < basePairs):
             val = next(pathway)
-            print(val)
             if started:
                 created_pathway.append(self.genome[val])
                 sum += val.length
@@ -135,10 +134,10 @@ class CircularGenome():
                 pass
         return created_pathway
 
-    def __protein(self, key, option, basePairs, pathway):
-        sum = 0
-        started = False
-        created_pathway = list()
+    def __protein(self, key: str, option: int, basePairs: int, pathway: Iterator) -> List:
+        sum: int = 0
+        started: bool = False
+        created_pathway: List = list()
         val = self.Info(None, None, None, None, None)
         while(sum < basePairs):
             val = next(pathway)
@@ -155,10 +154,10 @@ class CircularGenome():
                 pass
         return created_pathway
 
-    def __product(self, key, option, basePairs, pathway):
-        sum = 0
-        started = False
-        created_pathway = list()
+    def __product(self, key: str, option: int, basePairs: int, pathway: Iterator) -> List:
+        sum: int = 0
+        started: bool = False
+        created_pathway: List = list()
         val = self.Info(None, None, None, None, None)
         while(sum < basePairs):
             val = next(pathway)
