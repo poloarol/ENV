@@ -16,4 +16,5 @@ class InfoForm(Form):
         FileRequired(),
         FileAllowed(['gb','gbk', 'gbff'], 'Genbank Only'),
         DataRequired("Please upload a Genbank File")])
+    accession_number = StringField('Accession number of file', validators=[DataRequired("Please enter a valid accession number")])
     submit = SubmitField('Submit')

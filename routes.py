@@ -9,6 +9,7 @@ from werkzeug import secure_filename
 
 from Forms import InfoForm
 from ReadFile import ReadFile
+import Search
 
 UPLOAD_FOLDER = './static/uploads'
 ALLOWED_EXT = set(['gb','gbk', 'gbff'])
@@ -38,12 +39,17 @@ def mapping():
             option: str = request.form['options']
             gene: str = request.form['gene']
             basepairs: int = request.form['basepairs']
-
+            accession_number: str = request.form['accession_number']
             file: file = request.files['upload']
             if file and allowed_file(file.filename):
-                filename: str = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                readFile = ReadFile(os.path.join(UPLOAD_FOLDER, filename))
+                    filename: str = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    readFile = ReadFile(os.path.join(UPLOAD_FOLDER, filename))
+                    pathway = readFile.get_gene(option, gene, int(basepairs))
+            else:
+                search: Search = Search()
+                filename = search.searchGenbank(accession_number)
+                readFile = ReadFile(filename)
                 pathway = readFile.get_gene(option, gene, int(basepairs))
             if pathway != False:
                 return redirect(url_for("diagram"))
