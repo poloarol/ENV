@@ -12,9 +12,6 @@ class InfoForm(Form):
     options = RadioField('Search Option', coerce=int, choices=[(1, 'LocusTag'), (2, 'Gene'), (3, 'ProteinID'), (4, 'Product')], default=4)
     gene = StringField('Gene of Interest', validators=[DataRequired("Please Enter the name of the desired gene")])
     basepairs = IntegerField('Number of Bases', default=1500)
-    upload = FileField('File Upload', validators=[
-        FileRequired(),
-        FileAllowed(['gb','gbk', 'gbff'], 'Genbank Only'),
-        DataRequired("Please upload a Genbank File")])
-    accession_number = StringField('Accession number of file', validators=[DataRequired("Please enter a valid accession number")])
+    upload = FileField('File Upload', validators=[FileAllowed(['gb','gbk', 'gbff'], 'Genbank Only')])
+    accession_number = StringField('Accession number of file')
     submit = SubmitField('Submit')

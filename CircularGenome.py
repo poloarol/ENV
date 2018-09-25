@@ -2,7 +2,9 @@
 
 import itertools
 from collections import namedtuple
-from typing import Any, List, Dict, Optional, NamedTuple, Iterator
+from typing import Any, List, Dict, Optional, NamedTuple, Iterator, Tuple
+
+from Bio import Align
 
 class CircularGenome():
     """
@@ -174,3 +176,26 @@ class CircularGenome():
             else:
                 pass
         return created_pathway
+    
+    def delete(self):
+        """Empty the dictionary."""
+        self.genome.clear()
+
+    def provide_core_gene(self):
+        """Provide a fasta format of the core gene."""
+        return self.__fastaFormat__()
+    
+    def __fastaFormat__(self) -> str:
+        """Format a seq for blast."""
+        return ">{0} \n{1}".format(self.key.gene, self.genome[self.key].translation)
+
+    def compare_gene(self, seq: str) -> None:
+        """Build a list of all genes matching the entered query, via pairwise alignment."""
+        alignment = "alignment.txt"
+        aligner = Align.PairwiseAligner()
+        with open(alignment, "w+") as f:
+            for key in self.genome:
+                align = aligner.align(self.genome[key].translation, seq)
+                for x in sorted(align):
+                    f.write(x, x.score)
+        f.close()

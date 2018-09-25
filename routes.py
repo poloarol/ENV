@@ -9,7 +9,7 @@ from werkzeug import secure_filename
 
 from Forms import InfoForm
 from ReadFile import ReadFile
-import Search
+import Search as search
 
 UPLOAD_FOLDER = './static/uploads'
 ALLOWED_EXT = set(['gb','gbk', 'gbff'])
@@ -33,28 +33,34 @@ def mapping():
     form: InfoForm = InfoForm()
     global pathway
     global name
+    global option
+    gen_file: file = None
     if request.method == "POST":
         if form.validate_on_submit():
             name = request.form['organism_name']
-            option: str = request.form['options']
+            option = request.form['options']
             gene: str = request.form['gene']
             basepairs: int = request.form['basepairs']
             accession_number: str = request.form['accession_number']
-            file: file = request.files['upload']
-            if file and allowed_file(file.filename):
-                    filename: str = secure_filename(file.filename)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    readFile = ReadFile(os.path.join(UPLOAD_FOLDER, filename))
-                    pathway = readFile.get_gene(option, gene, int(basepairs))
+            try:
+                gen_file: file = request.files['upload']
+            except:
+                pass
+            if gen_file and allowed_file(gen_file.filename):
+                filename: str = secure_filename(gen_file.filename)
+                gen_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                readFile = ReadFile(os.path.join(UPLOAD_FOLDER, filename))
+                pathway = readFile.get_gene(option, gene, int(basepairs))
             else:
-                search: Search = Search()
                 filename = search.searchGenbank(accession_number)
+                if not filename:
+                    return "Not found"
                 readFile = ReadFile(filename)
                 pathway = readFile.get_gene(option, gene, int(basepairs))
             if pathway != False:
                 return redirect(url_for("diagram"))
             else:
-                pass
+                return "Not found"
         else:
             return render_template('map.html', form=form)
     return render_template('map.html', form=form)
@@ -71,7 +77,7 @@ def phylo():
     return render_template("phylo.html")
 
 @app.route("/error-404")
-def page_not_found(option: str):
+def page_not_found():
     """If gene of interest not found, show error message."""
     value: Optional[str] = chosen_option(option)
     return render_template('error-404.html', value = value)

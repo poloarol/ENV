@@ -2,12 +2,15 @@
 
 import sys
 import re
-from typing import Any, List, Dict, Optional, NamedTuple
+from typing import Any, List, Dict, Optional, NamedTuple, Tuple
 
 from collections import namedtuple
 from Bio import SeqIO
 from CircularGenome import CircularGenome
 from Gene import Gene
+
+from custom_blast import blast_seq
+import Search as search
 
 
 class ReadFile():
@@ -32,7 +35,6 @@ class ReadFile():
         table: int = 0
         strand: int = 0
         Info: NamedTuple = namedtuple('Info', 'locus, gene, protein_id, product, length')
-
 
         for feature in record.features:
             if "CDS" in feature.type:
@@ -60,12 +62,29 @@ class ReadFile():
                            product=product, length=stop-start)
                 self.GENOME.add(key, gene)
 
-
     def get_gene(self, search_type: str, parameter: str, basePairs: int) -> Any:
         """Search if gene on interest exist at specifed location and create the sub-pathway."""
         bool_search: bool = self.GENOME.findGene(int(search_type), parameter)
         if (bool_search):
-            genes: List = self.GENOME.createPathway(parameter, int(search_type), basePairs)
-            return [gene.serialize() for gene in genes]
+            cluster_list : List = list()
+            pathway_gene : List = self.GENOME.createPathway(parameter, int(search_type), basePairs)
+            core_gene = self.GENOME.provide_core_gene()
+            blast_output = blast_seq(core_gene)
+            self.analyze_other_genomes(blast_output[2], core_gene)
+            cluster_list.append(self.get_gene_cluster(pathway_gene))
+            return self.get_gene_cluster(pathway_gene)
         else:
             return bool_search
+
+    def get_gene_cluster(self, pathway: List) -> List:
+        """Get the necessary info to represent the gene."""
+        return [x.serialize() for x in pathway]
+    
+    def analyze_other_genomes(self, accession_number: str, core_gene: str) -> None:
+        """Analyze the results from the blast query."""
+        self.GENOME.delete()
+        record = search.searchGenbank(accession_number)
+        record = SeqIO.read(record, "genbank")
+        self.parse_file(record)
+        self.GENOME.compare_gene(core_gene)
+
