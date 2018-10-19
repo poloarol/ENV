@@ -9,8 +9,9 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 class Gene():
     """Stores all necessary information to recognise a gene."""
 
-    def __init__(self, locus_tag="N/A", gene="N/A", start=0, stop=0, codon_start=0, table=0, product="N/A", protein_id="N/A", translation="N/A", strand=0):  # noqa
+    def __init__(self, m_id = 0, locus_tag="N/A", gene="N/A", start=0, stop=0, codon_start=0, table=0, product="N/A", protein_id="N/A", translation="N/A", strand=0):  # noqa
         """Attibutes necessary to make a represent a gene class."""
+        self.id = m_id
         self.locus_tag = locus_tag
         self.start = start
         self.stop = stop
@@ -36,12 +37,12 @@ class Gene():
     def serialize(self):
         """Create a json/dictionary representation of gene."""
         return {
-            "Gene" : self.gene_name,
-            "Product" : self.protein_id,
-            "LocusTag" : self.locus_tag,
-            "Start" : self.start,
-            "Stop" : self.stop,
-            "Strand" : self.strand
+            "id" : self.id,
+            "start" : self.start,
+            "length" : self.stop-self.start,
+            "name" : self.gene_name,
+            "strand" : "+" if self.strand == 1 else "-",
+            "extraclass" : [self.protein_id, self.locus_tag]
         }
 
     def __repr__(self):

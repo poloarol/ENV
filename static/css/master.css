@@ -61,17 +61,6 @@ html, body{
   clear: both;
 }
 
-.svg{
-  display: inline-block;
-  position: relative;
-  top: 8em;
-  display: table;
-  margin: 0 auto;
-  width: 85%;
-  vertical-align: top;
-  overflow: hidden;
-}
-
 #err{
   position: relative;
   top: 15%;
