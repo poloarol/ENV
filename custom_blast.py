@@ -8,12 +8,12 @@ from Bio.Blast import NCBIXML
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-def blast_seq(seq: str, expect: int = 10, hitlist_size: int = 5) -> List:
+def blast_seq(seq: str, expect: int = 10, hitlist_size: int = 11) -> List:
     """Perform a blast on a given gene."""
-    result_handle = NCBIWWW.qblast("tblastn", "nr", seq, format_type="XML", hitlist_size=hitlist_size, expect=expect)
+    result_handle = NCBIWWW.qblast("tblastn", "nr", seq, format_type="XML", hitlist_size=hitlist_size, expect=expect, service="psi")
     blast_records = NCBIXML.parse(result_handle)
     access_num_list = list()
     for rec in blast_records:
         for alignment in rec.alignments:
             access_num_list.append(alignment.accession)
-    return access_num_list[2:7]
+    return access_num_list[1:len(access_num_list)]

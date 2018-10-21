@@ -72,24 +72,30 @@ class ReadFile():
         """Search if gene on interest exist at specifed location and create the sub-pathway."""
         bool_search: bool = self.GENOME.findGene(int(search_type), parameter)
         if (bool_search):
-            # cluster_list : List = list()
+            cluster_list : List = list()
             pathway_gene : List = self.GENOME.createPathway(parameter, int(search_type), basePairs)
-            # core_gene = self.GENOME.provide_core_gene()
-            # blast_output = blast_seq(core_gene)
-            # output: List = self.find_core_gene(blast_output[3], core_gene.split(" ")[2], basePairs)
-            # self.GENOME.set_key(output[0])
-            # cluster_list.append(self.get_gene_cluster(pathway_gene))
-            # output = self.build_pathway(basePairs)
-            # for x in output:
-            #     cluster_list.append(self.get_gene_cluster(x))
-            value = self.get_gene_cluster(pathway_gene)
-            return value;
+            cluster_list.append(self.get_gene_cluster(pathway_gene))
+            core_gene = self.GENOME.provide_core_gene()
+            blast_output = blast_seq(core_gene)
+            for i in range(len(blast_output)):
+                output: List = self.find_core_gene(blast_output[i], core_gene.split(" ")[2], basePairs)
+                if(len(output) == 0):
+                    pass
+                else:
+                    self.GENOME.set_key(output[0])
+                    ## cluster_list.append(self.get_gene_cluster(pathway_gene))
+                    output = self.build_pathway(basePairs)
+                    ## output = self.get_gene_cluster(basePairs)
+                    cluster_list.append(output)
+                    # for x in output:
+                    #     cluster_list.append(self.get_gene_cluster(x))
+            return cluster_list
         else:
             return bool_search
 
     def get_gene_cluster(self, pathway: List) -> List:
-        """Get the necessary info to represent the gene."""
-        return [x.serialize() for x in pathway]
+         """Get the necessary info to represent the gene."""
+         return [x.serialize() for x in pathway]
     
     def find_core_gene(self, accession_number: str, core_gene: str, bp: int) -> List:
         """Analyze the results from the blast query and creates a pathway with the found organisms."""

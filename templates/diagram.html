@@ -1,36 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/plot.css') }}">
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <div class="container"><canvas id="canvas" width="650" height="430"></canvas></div>
-<div class="container" id="secondary">
-  <div class="slides"><canvas id="canvas1" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas2" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas3" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas4" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas5" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas6" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas7" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas8" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas9" width="650" height="430"></canvas></div>
-  <div class="slides"><canvas id="canvas0" width="650" height="430"></canvas></div>
-  </div>
-  <a class="previous" onclick="plusSlides(-1)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1)">&#10095;</a>
-</div>
-<div style="text-align:center">
-    <span class="dot" onclick="currentSlide(1)"></span> 
-    <span class="dot" onclick="currentSlide(2)"></span> 
-    <span class="dot" onclick="currentSlide(3)"></span>
-    <span class="dot" onclick="currentSlide(4)"></span> 
-    <span class="dot" onclick="currentSlide(5)"></span> 
-    <span class="dot" onclick="currentSlide(6)"></span> 
-    <span class="dot" onclick="currentSlide(7)"></span> 
-    <span class="dot" onclick="currentSlide(8)"></span>
-    <span class="dot" onclick="currentSlide(9)"></span> 
-    <span class="dot" onclick="currentSlide(10)"></span> 
-</div>
+<div class="container owl-carousel owl-theme" id="secondary"></div>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/Scribl/Scribl.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/PlotGenome.js')}}"></script>
 <script type="text/javascript">
