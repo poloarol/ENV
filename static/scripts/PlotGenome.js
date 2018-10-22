@@ -2,7 +2,7 @@ function plotGenome(data){
   let mainCanvas = document.getElementById("canvas");
 
   let secondary = document.getElementById("secondary");
-  appendElem(secondary, data.length);
+  appendElem(secondary, data.length-1);
 
   let chart = new Scribl(mainCanvas, 500);
 
@@ -54,6 +54,13 @@ function appendElem(container, length){
     let height = document.createAttribute("height");
     let width = document.createAttribute("width");
     let canvasID = document.createAttribute("id");
+    let orgDesc = document.createElement("div");
+    let name = document.createElement("h3");
+    let accession = document.createElement("h3");
+    let pnames = document.createTextNode("Organism Name: ");
+    let paccession = document.createTextNode("Accession Number: ");
+    name.appendChild(pnames);
+    accession.appendChild(paccession);
     height.value = 430;
     width.value = 650;
     canvasID.value = "canvas" + i;
@@ -61,17 +68,24 @@ function appendElem(container, length){
     canvas.setAttributeNode(width);
     canvas.setAttributeNode(canvasID);
     div.setAttribute("class", "item");
+    orgDesc.appendChild(name);
+    orgDesc.appendChild(accession);
+    orgDesc.setAttribute("class", "description");
     div.appendChild(canvas);
-    container.appendChild(div)
+    div.appendChild(orgDesc);
+    container.appendChild(div);
   }
 }
 
 function generateDiagram(chart, data){
+  let gene;
+  let name;
   for(let i = 0; i < 1; i++){
     let track = chart.addTrack();
     for(let j = 0; j < data[i].length; j++){
        let color = (data[i][j].strand === "+") ? "#998ec3" : "#f1a340";
        gene = track.addFeature(new BlockArrow('complex', data[i][j].start, data[i][j].length, data[i][j].strand, {'color': color}));
+       name = data[i][j].name != "N/A" ? data[i][j].name : (data[i][j].extraclass[1] != "N/A" ? data[i][j].extraclass[1] : data[i][j].extraclass[0]);
        gene.onMouseover = "Name: " + data[i][j].name + "";
     }
   }

@@ -6,7 +6,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/plot.css') }}">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<div class="container"><canvas id="canvas" width="650" height="430"></canvas></div>
+<div class="container center">
+  <canvas id="canvas" width="650" height="430"></canvas>
+  <div class="description">
+    <h3>Organism Name: </h3>
+    <h3>Accession Number: </h3>
+  </div>
+</div>
 <div class="container owl-carousel owl-theme" id="secondary"></div>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/Scribl/Scribl.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/PlotGenome.js')}}"></script>
