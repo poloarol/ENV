@@ -8,6 +8,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from werkzeug import secure_filename
 
 from Forms import InfoForm
+from Forms import PhyloForm
 from ReadFile import ReadFile
 import Search as search
 
@@ -32,12 +33,10 @@ def mapping():
     """Read and allow the creation of the sub-pathway."""
     form: InfoForm = InfoForm()
     global pathway
-    global name
     global option
     gen_file: file = None
     if request.method == "POST":
         if form.validate_on_submit():
-            name = request.form['organism_name']
             option = request.form['options']
             gene: str = request.form['gene']
             basepairs: int = request.form['basepairs']
@@ -65,10 +64,14 @@ def mapping():
             return render_template('map.html', form=form)
     return render_template('map.html', form=form)
 
-@app.route("/Diagram")
+@app.route("/Diagram", methods=['GET','POST'])
 def diagram():
     """Draws the pathway if the gene of interest was found."""
-    return render_template("diagram.html", name=name, gene=pathway)
+    form: PhyloForm = PhyloForm()
+    if request.method == "POST":
+        value = request.form.getList("organism")
+        print(value)
+    return render_template("diagram.html", gene=pathway, form=form)
 
 
 @app.route("/Phylogeny")
