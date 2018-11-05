@@ -1,8 +1,8 @@
 function plotGenome(data){
   let mainCanvas = document.getElementById("canvas");
 
-  let secondary = document.getElementById("secondary");
-  appendElem(secondary, data.length-1);
+  let secondary = document.getElementById("itemMap");
+  appendElem(secondary, data, data.length-1);
 
   let chart = new Scribl(mainCanvas, 500);
 
@@ -21,8 +21,6 @@ function plotGenome(data){
     let datum = [data[i]]
     generateDiagram(secondaryChart, datum);
   }
-
-  genCheckBox(data);
 
 }
 
@@ -49,7 +47,7 @@ function find_start_stop(data){
 }
 
 
-function appendElem(container, length){
+function appendElem(container, data, length){
   for(let i = 1; i < length; i++){
     let div = document.createElement("div");
     let canvas = document.createElement("canvas");
@@ -62,8 +60,8 @@ function appendElem(container, length){
     let meta = document.createElement("div");
     let desc = document.createElement("div");
 
-    let name = document.createTextNode("Organism Name: ");
-    let accession = document.createTextNode("Accession Number: ");
+    let name = document.createTextNode(`Organism: ${data[i][0]["orgName"]}`);
+    let accession = document.createTextNode(`Accession #:`);
 
     height.value = 400;
     width.value = 700;
@@ -87,51 +85,11 @@ function appendElem(container, length){
     orgDescContent.appendChild(desc);
 
     orgDesc.appendChild(orgDescContent);
+    div.appendChild(orgDesc);
 
     div.appendChild(canvas);
-    div.appendChild(orgDesc);
     container.appendChild(div);
-    
   }
-}
-
-function genCheckBox(data){
-  let div = document.getElementsByClassName("grouped field")[0];
-  for(let i = 0; i < data.length; i++){
-    let box = document.createElement("div");
-    box.setAttribute("class", "ui checkbox");
-    let checkbox = document.createElement('input');
-    // checkbox.setAttribute("class", "hidden");
-    checkbox.setAttribute("tabindex", 0);
-    // checkbox.setAttribute("name", "organism");
-    let label = document.createElement("label");
-    let name = document.createTextNode(`${data[i][0]["orgName"]}`);
-    let br = document.createElement("br");
-    let value = "";
-    checkbox.type = "checkbox"; 
-    for(let j = 0; j < data[i].length; j++){
-      value += data[i][j]["AA"];
-    }
-    checkbox.name =  "organism";
-    checkbox.value = value;
-    label.appendChild(name);
-    // <input type="checkbox" tabindex="0" class="hidden">
-    // <label>Checkbox</label>
-    box.appendChild(checkbox);
-    box.appendChild(label);
-    box.appendChild(br);
-    div.appendChild(box);
-  }
-}
-
-function getSeq(data){
-  // let seq = ""
-  // for (key in data){
-  //   if (key.hasOwnProperty("AA")){
-  //     seq += data["AA"]
-  //   }
-  // }
-  console.log(data);
 }
 
 function generateDiagram(chart, data){

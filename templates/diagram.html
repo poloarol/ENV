@@ -1,44 +1,52 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/plot.css') }}">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<div class="container myform">
-  <form class="ui form" action="{{url_for('diagram')}}" method="post" target="_blank">
-      <div class="field">
-          <label>Build Phylogenetic Trees</label>
-            <div class="grouped field">
-            </div>
-        </div>
-        <button class="ui button" type="submit">submit</button>
-    </form>
-</div>
-<div class="outer">
-    <div class="container center">
-        <canvas id="canvas" width="700" height="400"></canvas>
-        <div class="ui card">
-          <div class="content">
-            <div class="header">Organism Name: </div>
-            <div class="meta">Accession Number: </div>
-            <div class="description" id="main">
-              Click to see Gene info.
-            </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<div class="ui grid first">
+  <div class="fourteen wide column">
+    <div class="ui huge positive message">
+        <div class="header">
+            Analysis was completed successfully
           </div>
+          <p>Job Number: <b> #######--#####</b> This can be used for future references</p>
+          <a href="#">Continue for Phylogenetic Analysis</a>
+    </div>
+  </div>
+</div>
+<div class="ui grid second">
+  <div class="fourteen wide column">
+    <div class="container center">
+      <canvas id="canvas" width="700" height="400"></canvas>
+      <div class="ui card">
+        <div class="content">
+          <div class="header">Organism Name: </div>
+          <div class="meta">Accession Number: </div>
+          <div class="description" id="main">Click to see Gene info.</div>
         </div>
       </div>
-    <div class="container owl-carousel owl-theme" id="secondary"></div>
+    </div>
+    <div class="container">
+      <div id="itemMap" class="owl-carousel owl-theme"></div>
+    </div>
+  </div>
 </div>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/Scribl/Scribl.1.1.5.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/PlotGenome.js')}}"></script>
 <script type="text/javascript">
-  var gene = '{{ gene | tojson}}'
-  var parsed = JSON.parse(gene);
+  var gene = {{ gene | tojson}}
+  //var parsed = JSON.parse(gene);
   window.addEventListener('load', function(){
-    plotGenome(parsed), false})
+    plotGenome(gene), false})
 </script>
-<script type="text/javascript" src="{{url_for('static', filename='scripts/carousel.js')}}" defer></script>
+<script type="text/javascript" src="{{url_for('static', filename='scripts/carousel.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/form.js')}}"></script>
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      carousel();
+    }, false);
+</script> -->
 {% endblock %}
 

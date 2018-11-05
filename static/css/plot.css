@@ -1,75 +1,100 @@
-.container{
-    display: block;
-    margin: auto;
+div.ui.grid{
+    position: absolute;
+    display: inline-flex;
+    min-width: 100%;
+}
+
+div.first{
+    top: 15%;
+}
+
+div.second{
+    top: 25%;
+    height: 100%;
+}
+
+i.caret.down.icon{
+    position: absolute;
+}
+
+div.fourteen.wide.column, div.owl-nav{
+    margin: 0 auto;
+}
+
+div#drop{
+    position: absolute;
+    width: 90%;
+    margin: 0 auto;
+    top: 25%;
+    left: 5%;
 }
 
 .container.center{
-    width: 80%;
-    padding-top: 5em;
+    display: inline-flex;
+    margin-top: 3%;
+    margin-left: 30%;
+}
+
+div.container.center > div.ui.card, .ui.card{
+    height: 60%;
+}
+
+div.container.center > div.ui.card{
+    right: 8%;
+}
+
+div.ui.card{
+    right: 10%;
+}
+
+div.item{
+    display: inline-flex;
+    flex-direction: row-reverse;
+}
+
+div.owl-carousel, div.owl-stage-outer, div.owl-nav{
+    position: absolute !important;
+}
+
+div.owl-carousel, div.owl-stage-outer{
+    margin-left: 5%;
+}
+
+div.owl-dots{
+    position: relative;
+    top: 20em;
+}
+
+div.owl-carousel, div.owl-item{
+    left: 0.5%;
+}
+
+div.owl-nav{
+    top: 15em;
+    width: 90%;
+}
+
+button.owl-prev{
+    float: left;
+}
+
+button.ui.icon.button, button.owl-next{
+    float: right;
+}
+
+button.ui.icon.button{
+    position: relative;
+    top: -5px;
 }
 
 canvas{
     padding: 0;
     margin: auto;
     display: block;
-    margin-right: 28em;
-}
-
-.hide{
-   display: none;
-}
-
-.ui.card{
-    float: right;
-    top: -27em;
-    right: 16em !important;
-}
-
-.owl-stage-outer{
-    width: 100%;
-    max-height: 20em;
-}
-
-
-.owl-carousel.owl-loaded{
-    top: -10em;
-}
-
-.owl-dots, .owl-nav{
-   margin-right: 40em;
 }
 
 p{
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
-}
-
-.outer{
-    width: 60%;
-    float: right;
-}
-
-.container.owl-carousel.owl-theme.owl-loaded.owl-drag{
-    right: 6.5em;
-}
-
-.myform{
-    width: 40%;
-    float: left;
-    margin-left: -12em;
-}
-
-.ui.form{
-    float: left;
-    top: 4em;
-}
-
-.ui.form .field{
-    margin-right: 5px;
-    left: 5px;
-}
-
-.ui.checkbox{
-    margin-right: 8px;
 }

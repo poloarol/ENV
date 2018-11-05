@@ -6,18 +6,20 @@ from typing import Any, List, Dict, Optional
 
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug import secure_filename
+from flask_session import Session
 
 from Forms import InfoForm
 from Forms import PhyloForm
 from ReadFile import ReadFile
+
 import Search as search
+import datetime
+from sqlitedict import SqliteDict
 
 UPLOAD_FOLDER = './static/uploads'
 ALLOWED_EXT = set(['gb','gbk', 'gbff'])
 
 app = Flask(__name__, template_folder='templates')
-app.secret_key ="developement-key"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename: str) -> bool:
     """Define the allowd files to be uploaded."""
@@ -67,11 +69,7 @@ def mapping():
 @app.route("/Diagram", methods=['GET','POST'])
 def diagram():
     """Draws the pathway if the gene of interest was found."""
-    form: PhyloForm = PhyloForm()
-    if request.method == "POST":
-        value = request.form.getList("organism")
-        print(value)
-    return render_template("diagram.html", gene=pathway, form=form)
+    return render_template("diagram.html", gene = pathway)
 
 
 @app.route("/Phylogeny")
@@ -91,4 +89,6 @@ def chosen_option(key: str) -> Optional[str]:
     return dict.get(key)
 
 if __name__ == "__main__":
+    app.config['SECRET_KEY'] = "DEVELOPEMENT-super-SECRET-key-316"
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.run(debug=True, threaded=True)
