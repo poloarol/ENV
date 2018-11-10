@@ -8,8 +8,8 @@
       <br>
       {{ form.hidden_tag() }}
       <div class="eight wide field">
-        <label>{# form.organism_name.label #}</label>
-        <!-- <input type="text" name="organism_name" placeholder="Organism Name"> -->
+        <label>{{ form.email.label }}</label>
+        <input type="email" name="email" placeholder="Email">
       </div>
       <h4 class="ui divider header">{{ form.upload.label }}</h4>
       <br>
@@ -39,13 +39,17 @@
         </div>
         <div class="container second">
           <div class="grouped fields">
-            <div class="eight wide field">
+            <div class="five wide field">
               <label>{{ form.gene.label }}</label>
               <input type="text" name="gene" placeholder="Gene of Interest">
             </div>
-            <div class="eight wide field">
+            <div class="five wide field">
               <label>{{ form.basepairs.label }}</label>
               <input type="text" name="basepairs" placeholder="1500">
+            </div>
+            <div class="five wide field">
+              <label>{{form.similarity.label}}</label>
+              <input type="text" name="ident" placeholder="1500">
             </div>
           </div>
         </div>

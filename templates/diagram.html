@@ -10,9 +10,9 @@
     <div class="ui huge positive message">
         <div class="header">
             Analysis was completed successfully
-          </div>
-          <p>Job Number: <b> #######--#####</b> This can be used for future references</p>
-          <a href="#">Continue for Phylogenetic Analysis</a>
+        </div>
+        <p>Job Number: <b>{{number}}</b> This can be used for future references</p>
+        <a target="_blank" href="{{url_for('phyloTree', job_number = number)}}">Continue for Phylogenetic Analysis</a>
     </div>
   </div>
 </div>
@@ -22,14 +22,14 @@
       <canvas id="canvas" width="700" height="400"></canvas>
       <div class="ui card">
         <div class="content">
-          <div class="header">Organism Name: </div>
+          <div class="header" id="name">Organism Name: </div>
           <div class="meta">Accession Number: </div>
           <div class="description" id="main">Click to see Gene info.</div>
         </div>
       </div>
     </div>
     <div class="container">
-      <div id="itemMap" class="owl-carousel owl-theme"></div>
+      <div id="itemMap" class="owl-carousel"></div>
     </div>
   </div>
 </div>

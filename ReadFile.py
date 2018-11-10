@@ -69,7 +69,7 @@ class ReadFile():
             # If the file has no CDS field or can't be parsed move to the next
             pass
 
-    def get_gene(self, search_type: str, parameter: str, basePairs: int) -> Any:
+    def get_gene(self, search_type: str, parameter: str, basePairs: int, similarity: int) -> Any:
         """Search if gene on interest exist at specifed location and create the sub-pathway."""
         bool_search: bool = self.GENOME.findGene(int(search_type), parameter)
         if (bool_search):
@@ -79,17 +79,18 @@ class ReadFile():
             core_gene = self.GENOME.provide_core_gene()
             blast_output = blast_seq(core_gene)
             for i in range(len(blast_output)):
-                output: List = self.find_core_gene(blast_output[i], core_gene.split(" ")[2], basePairs)
+                output: List = self.find_core_gene(blast_output[i], core_gene.split(" ")[2], similarity)
                 if(len(output) == 0):
                     pass
                 else:
-                    self.GENOME.set_key(output[0])
-                    ## cluster_list.append(self.get_gene_cluster(pathway_gene))
-                    output = self.build_pathway(basePairs)
-                    ## output = self.get_gene_cluster(basePairs)
-                    cluster_list.append(output)
-                    # for x in output:
-                    #     cluster_list.append(self.get_gene_cluster(x))
+                    for i in range(len(output)):
+                        self.GENOME.set_key(output[i])
+                        ## cluster_list.append(self.get_gene_cluster(pathway_gene))
+                        output = self.build_pathway(basePairs)
+                        ## output = self.get_gene_cluster(basePairs)
+                        cluster_list.append(output)
+                        # for x in output:
+                        #     cluster_list.append(self.get_gene_cluster(x))
             return cluster_list
         else:
             return bool_search
@@ -98,13 +99,13 @@ class ReadFile():
          """Get the necessary info to represent the gene."""
          return [x.serialize() for x in pathway]
     
-    def find_core_gene(self, accession_number: str, core_gene: str, bp: int) -> List:
+    def find_core_gene(self, accession_number: str, core_gene: str, similarity: int) -> List:
         """Analyze the results from the blast query and creates a pathway with the found organisms."""
         self.GENOME.delete()
         record = search.searchGenbank(accession_number)
         record = SeqIO.read(record, "genbank")
         self.parse_file(record)
-        pathway = self.GENOME.compare_gene(core_gene, bp)
+        pathway: List = self.GENOME.compare_gene(core_gene, similarity)
         return pathway
     
     def build_pathway(self, basepairs: int) -> List:

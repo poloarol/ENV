@@ -8,6 +8,10 @@ div.first{
     top: 15%;
 }
 
+button.ui.compact.icon.basic.button{
+    float: right;
+}
+
 div.second{
     top: 25%;
     height: 100%;
@@ -97,4 +101,8 @@ p{
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
+}
+
+.cloud.download.icon{
+    left: 10%;
 }

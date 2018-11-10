@@ -202,25 +202,23 @@ class CircularGenome():
         """Format a seq for blast."""
         return ">{0} \n {1}".format(self.key.gene, self.genome[self.key].translation)
 
-    def compare_gene(self, seq: str, bp: int) -> List:
+    def compare_gene(self, seq: str, similarity: int) -> List:
         """Build a list of all genes matching the entered query, via Levenshtein string comparison."""
         key_list: List = list()
-        pathway: List = list()
+        SIMILARITY_VALUE = similarity
         for key in self.genome:
-            SIMILARITY_VALUE = 0.95
             value = round(Levenshtein.ratio(self.genome[key].translation, seq), 2)
             if value >= SIMILARITY_VALUE:
-                if key not in key_list:
-                    key_list.append(key)
+                key_list.append(key)
         # self.gene_separation(key_list, bp)
         return key_list
 
 
-    def gene_separation(self, my_list: List, bp: int) -> None:
-        """Remove all genes whcih are +/- a certain distance from each other, so as to avoid duplicates."""
-        for i in range(len(my_list)):
-            for j in range(len(my_list)):
-                if my_list[i] == my_list[j] and i != j:
-                    val = abs(self.genome[my_list[i]] - self.genome[my_list[j]])
-                    if val <= bp:
-                        del my_list[j]
+# def gene_separation(self, my_list: List, bp: int) -> None:
+#     """Remove all genes whcih are +/- a certain distance from each other, so as to avoid duplicates."""
+#     for i in range(len(my_list)):
+#         for j in range(len(my_list)):
+#             if my_list[i] == my_list[j] and i != j:
+#                 val = abs(self.genome[my_list[i]] - self.genome[my_list[j]])
+#                 if val <= bp:
+#                     del my_list[j]
