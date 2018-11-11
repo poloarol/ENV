@@ -1,20 +1,20 @@
 div.ui.grid{
-    position: absolute;
+    /*position: absolute;*/
     display: inline-flex;
     min-width: 100%;
-}
-
-div.first{
-    top: 15%;
 }
 
 button.ui.compact.icon.basic.button{
     float: right;
 }
+div.first{
+    position: relative;
+    top: 10%;
+}
 
 div.second{
-    top: 25%;
-    height: 100%;
+    position: relative;
+    top: 8%;
 }
 
 i.caret.down.icon{

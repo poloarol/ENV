@@ -1,6 +1,6 @@
 function plotGenome(data){
   let mainCanvas = document.getElementById("canvas");
-  let secondary = document.getElementById("itemMap");
+  let secondary = document.querySelector(".owl-carousel");
   appendElem(secondary, data);
 
   document.getElementById("name").innerHTML = data[0][0]["orgName"];
@@ -14,8 +14,8 @@ function plotGenome(data){
     }
   }
 
-  generateDiagram(chart, data.splice(0,1));
-  for(let i = 1; i < data.length; i++){
+  generateDiagram(chart, [data[0]]);
+  for(let i = 0; i < data.length; i++){
     let canvasID = "canvas" + i;
     let secondaryCanvas = document.getElementById(canvasID);
     let secondaryChart = new Scribl(secondaryCanvas, 500);
@@ -55,7 +55,7 @@ function find_start_stop(data){
 
 
 function appendElem(container, data){
-  for(let i = 1; i < data.length; i++){
+  for(let i = 0; i < data.length; i++){
     let div = document.createElement("div");
     let canvas = document.createElement("canvas");
     let height = document.createAttribute("height");
@@ -71,7 +71,7 @@ function appendElem(container, data){
 
     let buttonDiv = document.createElement("button");
     buttonDiv.setAttribute("class", "ui compact icon basic button");
-    geneIcon.setAttribute("class", "large cloud download icon");
+    geneIcon.setAttribute("class", "large copy icon");
     // let fastaIcon = document.createElement("i");
     // fastaIcon.setAttribute("class", "cloud download icon");
     buttonDiv.appendChild(geneIcon);

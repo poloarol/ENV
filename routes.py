@@ -14,7 +14,7 @@ from Forms import InfoForm
 from Forms import PhyloForm
 from ReadFile import ReadFile
 
-import Search as search
+import search as search
 import datetime
 import sqlite3
 import simplejson as json
@@ -29,8 +29,8 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": "adjon081@uottawa.ca",
-    "MAIL_PASSWORD": "Ap243v6ta8"
+    "MAIL_USERNAME": "",
+    "MAIL_PASSWORD": ""
 }
 
 
@@ -67,8 +67,7 @@ def mapping():
             gene: str = request.form['gene']
             basepairs: int = request.form['basepairs']
             accession_number: str = request.form['accession_number']
-            ident: int = request.form['ident']
-            print(ident)
+            ident: int = int(request.form['ident'])
             try:
                 gen_file: file = request.files['upload']
             except:
@@ -77,7 +76,7 @@ def mapping():
                 filename: str = secure_filename(gen_file.filename)
                 gen_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 readFile = ReadFile(os.path.join(UPLOAD_FOLDER, filename))
-                pathway = readFile.get_gene(option, gene, int(basepairs), int(ident)/100)
+                pathway = readFile.get_gene(option, gene, basepairs, ident/100)
             else:
                 filename = search.searchGenbank(accession_number)
                 if not filename:

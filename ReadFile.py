@@ -10,7 +10,7 @@ from CircularGenome import CircularGenome
 from Gene import Gene
 
 from custom_blast import blast_seq
-import Search as search
+import search as search
 
 
 class ReadFile():
@@ -83,14 +83,17 @@ class ReadFile():
                 if(len(output) == 0):
                     pass
                 else:
-                    for i in range(len(output)):
-                        self.GENOME.set_key(output[i])
-                        ## cluster_list.append(self.get_gene_cluster(pathway_gene))
-                        output = self.build_pathway(basePairs)
-                        ## output = self.get_gene_cluster(basePairs)
-                        cluster_list.append(output)
-                        # for x in output:
-                        #     cluster_list.append(self.get_gene_cluster(x))
+                    try:
+                        for i in range(len(output)):
+                            self.GENOME.set_key(output[i])
+                            ## cluster_list.append(self.get_gene_cluster(pathway_gene))
+                            output = self.build_pathway(basePairs)
+                            ## output = self.get_gene_cluster(basePairs)
+                            cluster_list.append(output)
+                            # for x in output:
+                            #     cluster_list.append(self.get_gene_cluster(x))
+                    except Exception:
+                        print(type(output[i]))
             return cluster_list
         else:
             return bool_search
@@ -112,17 +115,20 @@ class ReadFile():
         """Create a new pathway."""
         key = self.GENOME.key
         pathway_gene: List = list()
-        if key.locus is not "N/A":
-            value = key.locus
-            pathway_gene = self.GENOME.createPathway(value, 1, basepairs)
-        elif key.gene is not "N/A":
-            value = key.gene
-            pathway_gene = self.GENOME.createPathway(value, 2, basepairs)
-        elif key.product is not "N/A":
-            value = key.protein_id
-            pathway_gene = self.GENOME.createPathway(value, 3, basepairs)
-        else:
-            value = key.product
-            pathway_gene = self.GENOME.createPathway(value, 0, basepairs)
-        return self.get_gene_cluster(pathway_gene)
+        try:
+            if key.locus is not "N/A":
+                value = key.locus
+                pathway_gene = self.GENOME.createPathway(value, 1, basepairs)
+            elif key.gene is not "N/A":
+                value = key.gene
+                pathway_gene = self.GENOME.createPathway(value, 2, basepairs)
+            elif key.product is not "N/A":
+                value = key.protein_id
+                pathway_gene = self.GENOME.createPathway(value, 3, basepairs)
+            else:
+                value = key.product
+                pathway_gene = self.GENOME.createPathway(value, 0, basepairs)
+            return self.get_gene_cluster(pathway_gene)
+        except Exception:
+            pass
 

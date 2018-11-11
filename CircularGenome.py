@@ -205,10 +205,9 @@ class CircularGenome():
     def compare_gene(self, seq: str, similarity: int) -> List:
         """Build a list of all genes matching the entered query, via Levenshtein string comparison."""
         key_list: List = list()
-        SIMILARITY_VALUE = similarity
         for key in self.genome:
             value = round(Levenshtein.ratio(self.genome[key].translation, seq), 2)
-            if value >= SIMILARITY_VALUE:
+            if value >= similarity:
                 key_list.append(key)
         # self.gene_separation(key_list, bp)
         return key_list
