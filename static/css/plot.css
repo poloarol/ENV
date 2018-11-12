@@ -51,7 +51,7 @@ div.ui.card{
     right: 10%;
 }
 
-div.item{
+div.canvasDiv{
     display: inline-flex;
     flex-direction: row-reverse;
 }
@@ -61,7 +61,7 @@ div.owl-carousel, div.owl-stage-outer, div.owl-nav{
 }
 
 div.owl-carousel, div.owl-stage-outer{
-    margin-left: 5%;
+    margin-left: 13.5%;
 }
 
 div.owl-dots{

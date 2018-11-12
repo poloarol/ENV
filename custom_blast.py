@@ -16,5 +16,5 @@ def blast_seq(seq: str, expect: int = 10, hitlist_size: int = 100) -> List:
     for rec in blast_records:
         for alignment in rec.alignments:
             access_num_list.append(alignment.accession)
-    print(access_num_list)
+    access_num_list.reverse()
     return access_num_list

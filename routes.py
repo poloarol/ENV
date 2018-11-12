@@ -14,7 +14,7 @@ from Forms import InfoForm
 from Forms import PhyloForm
 from ReadFile import ReadFile
 
-import search as search
+import Search as search
 import datetime
 import sqlite3
 import simplejson as json
@@ -32,15 +32,6 @@ mail_settings = {
     "MAIL_USERNAME": "",
     "MAIL_PASSWORD": ""
 }
-
-
-# try:
-#     sql = " SELECT * FROM GENOMEMAP_INFO WHERE JOB_NUMBER = ? "
-#     cursor.execute(sql, ("6e2c8c10-acc8-40b0-93cc-d73670cdab90",))
-#     data = cursor.fetchone()
-#     print(data)
-# except Exception:
-#     print(traceback.format_exc())
 
 ## "MAIL_USERNAME": os.environ['EMAIL_USER'],
 ## "MAIL_PASSWORD": os.environ['EMAIL_PASSWORD']
@@ -65,9 +56,11 @@ def mapping():
             email: str = request.form["email"]
             option = request.form['options']
             gene: str = request.form['gene']
-            basepairs: int = request.form['basepairs']
+            basepairs: int = int(request.form['basepairs'])
             accession_number: str = request.form['accession_number']
             ident: int = int(request.form['ident'])
+            hit_size: int = int(request.form['hit_size'])
+            expect: int = int(request.form['expect'])
             try:
                 gen_file: file = request.files['upload']
             except:
@@ -82,7 +75,7 @@ def mapping():
                 if not filename:
                     return "Not found"
                 readFile = ReadFile(filename)
-                pathway = readFile.get_gene(option, gene, int(basepairs), int(ident)/100)
+                pathway = readFile.get_gene(option, gene, basepairs, ident/100, hit_size, expect)
             if pathway != False:
                 job_number = uuid.uuid4()
                 insert_job_number(job_number)

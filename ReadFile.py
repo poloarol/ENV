@@ -10,7 +10,7 @@ from CircularGenome import CircularGenome
 from Gene import Gene
 
 from custom_blast import blast_seq
-import search as search
+import Search as search
 
 
 class ReadFile():
@@ -69,7 +69,7 @@ class ReadFile():
             # If the file has no CDS field or can't be parsed move to the next
             pass
 
-    def get_gene(self, search_type: str, parameter: str, basePairs: int, similarity: int) -> Any:
+    def get_gene(self, search_type: str, parameter: str, basePairs: int, similarity: int, hit_size: int, expect: int) -> Any:
         """Search if gene on interest exist at specifed location and create the sub-pathway."""
         bool_search: bool = self.GENOME.findGene(int(search_type), parameter)
         if (bool_search):
@@ -77,7 +77,10 @@ class ReadFile():
             pathway_gene : List = self.GENOME.createPathway(parameter, int(search_type), basePairs)
             cluster_list.append(self.get_gene_cluster(pathway_gene))
             core_gene = self.GENOME.provide_core_gene()
-            blast_output = blast_seq(core_gene)
+            if not core_gene.split(" ")[2]:
+                ## To avoid blasting a sequence without AA, DNA since the string is given a fasta format
+                return False
+            blast_output = blast_seq(core_gene, hit_size, expect)
             for i in range(len(blast_output)):
                 output: List = self.find_core_gene(blast_output[i], core_gene.split(" ")[2], similarity)
                 if(len(output) == 0):
@@ -90,10 +93,11 @@ class ReadFile():
                             output = self.build_pathway(basePairs)
                             ## output = self.get_gene_cluster(basePairs)
                             cluster_list.append(output)
-                            # for x in output:
-                            #     cluster_list.append(self.get_gene_cluster(x))
+                            ## for x in output:
+                            ##     cluster_list.append(self.get_gene_cluster(x))
                     except Exception:
-                        print(type(output[i]))
+                        ## need to add this to loop
+                        continue
             return cluster_list
         else:
             return bool_search
@@ -130,5 +134,6 @@ class ReadFile():
                 pathway_gene = self.GENOME.createPathway(value, 0, basepairs)
             return self.get_gene_cluster(pathway_gene)
         except Exception:
+            ## Need to add it to logs
             pass
 

@@ -2,60 +2,67 @@
 
 {% block content %}
 
-  <section>
-    <form class="ui form segment" action="{{ url_for('mapping') }}" method="POST" enctype="multipart/form-data">
-      <h4 class="ui divider header">GenomeMap</h4>
-      <br>
+    <form class="ui form raised segment" action="{{ url_for('mapping') }}" method="POST" enctype="multipart/form-data">
+      <h4 class="ui dividing header">GenomeMap</h4>
       {{ form.hidden_tag() }}
       <div class="eight wide field">
         <label>{{ form.email.label }}</label>
         <input type="email" name="email" placeholder="Email">
       </div>
-      <h4 class="ui divider header">{{ form.upload.label }}</h4>
-      <br>
+      <h4 class="ui dividing header">{{ form.upload.label }}</h4>
       <div class="container">
         <div class="two fields">
           <div class="eight wide field">
             <input type="file" name="upload">
           </div>
           <div class="eight wide field">
-            <input type="text" name="accession_number">
+            <input type="text" name="accession_number" placeholder="Accession #">
           </div>
         </div>
       </div>
-      <h4 class="ui divider header">{{ form.options.label }}</h4>
-      <div class="container main">
-        <div class="container first">
-          <div class="grouped fields">
-            {% for subfield in form.options %}
-            <div class="field">
-              <div class="ui radio checkbox">
-                {{ subfield }}
-                {{ subfield.label }}
-              </div>
-            </div>
-            {% endfor %}
+      <h4 class="ui dividing header">Blast Criteria</h4>
+      <div class="two fields">
+        <div class="field">
+          <div class="eight wide field">
+            <label>{{form.hit_size.label}}</label>
+            <input type="number" name="hit_size" placeholder="50">
           </div>
         </div>
-        <div class="container second">
-          <div class="grouped fields">
+        <div class="field">
             <div class="eight wide field">
-              <label>{{ form.gene.label }}</label>
-              <input type="text" name="gene" placeholder="Gene of Interest">
-            </div>
-            <div class="eight wide field">
-              <label>{{ form.basepairs.label }}</label>
-              <input type="text" name="basepairs" placeholder="1500">
-            </div>
-            <div class="eight wide field">
-              <label>{{form.similarity.label}}</label>
-              <input type="text" name="ident" placeholder="1500">
+              <label>{{form.expect.label}}</label>
+              <input type="number" name="expect" placeholder="10">
             </div>
           </div>
+      </div>
+      <h4 class="ui dividing header">{{ form.options.label }}</h4>
+      <div class="two fields">
+        <div class="grouped fields">
+          <div class="eight wide field">
+            <label>{{ form.gene.label }}</label>
+            <input type="text" name="gene" placeholder="Gene of Interest">
+          </div>
+          <div class="eight wide field">
+            <label>{{ form.basepairs.label }}</label>
+            <input type="text" name="basepairs" placeholder="1500">
+          </div>
+          <div class="eight wide field">
+            <label>{{form.similarity.label}}</label>
+            <input type="number" name="ident" placeholder="65">
+          </div>
+        </div>
+        <div class="grouped fields" id="sec">
+          {% for subfield in form.options %}
+          <div class="field">
+            <div class="ui radio checkbox">
+              {{ subfield }}
+              {{ subfield.label }}
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
         {{ form.submit(class="ui blue button")}}
     </form>
-  </section>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/form.js')}}"></script>
 {% endblock %}

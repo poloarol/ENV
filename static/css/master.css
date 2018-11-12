@@ -37,28 +37,14 @@ html, body{
   padding: 40px;
 }
 
-
-.main{
-  text-align: center;
-  padding: 10px;
-}
-
-.first{
-  width: 50%;
-  padding: 5px;
-  float: left;
-  text-align: left;
-}
-
-.second{
-  float: right;
-  text-align: left;
-  padding: 5px;
-  width: 50%;
-}
-
 .side{
   clear: both;
+}
+
+div#sec{
+  position: absolute;
+  right: 0;
+  bottom: 25%;
 }
 
 #err{

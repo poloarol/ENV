@@ -1,8 +1,15 @@
 function plotGenome(data){
   let mainCanvas = document.getElementById("canvas");
-  let secondary = document.querySelector(".owl-carousel");
-  appendElem(secondary, data);
-
+  appendElem(data)
+  let slides = createSlides(data);
+  for(let i = 0; i < slides.length; i++){
+     let slide = "#slides"+i;
+     let div = document.querySelectorAll(slide);
+     if(div[0].offsetParent.classList.contains("cloned"))
+        div[1].appendChild(slides[i]);
+     else
+        div[0].appendChild(slides[i]);
+   }
   document.getElementById("name").innerHTML = data[0][0]["orgName"];
 
   let chart = new Scribl(mainCanvas, 500);
@@ -16,19 +23,19 @@ function plotGenome(data){
 
   generateDiagram(chart, [data[0]]);
   for(let i = 0; i < data.length; i++){
-    let canvasID = "canvas" + i;
-    let secondaryCanvas = document.getElementById(canvasID);
-    let secondaryChart = new Scribl(secondaryCanvas, 500);
+    let canvasID = "#canvas" + i;
+    let secondaryCanvas = document.querySelectorAll(canvasID);
+    let secondaryChart = new Scribl(secondaryCanvas[0], 500);
     let datum = [data[i]]
     generateDiagram(secondaryChart, datum);
   }
 
   const span = document.querySelectorAll(".ui.compact.icon.button");
-  for(let i = 0; i < span.length; i++){
-    span[i].addEventListener("click", function(){
-      // copyToClickBoard(document.querySelectorAll("ui.compact.icon.button")[i]);
-    })
-  }
+  // for(let i = 0; i < span.length; i++){
+  //   span[i].addEventListener("click", function(){
+  //     // copyToClickBoard(document.querySelectorAll("ui.compact.icon.button")[i]);
+  //   })
+  // }
 }
 
 function normalize(data, start){
@@ -54,7 +61,9 @@ function find_start_stop(data){
 }
 
 
-function appendElem(container, data){
+function createSlides(data){
+  // Attach eash slide to at it's position
+  let slides = [];
   for(let i = 0; i < data.length; i++){
     let div = document.createElement("div");
     let canvas = document.createElement("canvas");
@@ -98,7 +107,6 @@ function appendElem(container, data){
     canvas.setAttributeNode(height);
     canvas.setAttributeNode(width);
     canvas.setAttributeNode(canvasID);
-    div.setAttribute("class", "item");
     desc.setAttribute("class", "description");
     desc.setAttribute("class", "sec");
     desc.innerHTML = "Click to see Gene info.";
@@ -111,14 +119,27 @@ function appendElem(container, data){
     orgDescContent.appendChild(header);
     orgDescContent.appendChild(meta);
     orgDescContent.appendChild(desc);
-
+    div.setAttribute("class", "canvasDiv")
     orgDesc.appendChild(orgDescContent);
     div.appendChild(orgDesc);
     div.appendChild(canvas);
     orgDescContent.appendChild(icon)
-    container.appendChild(div);
+    slides.push(div);
+  }
+  return slides
+}
+
+function appendElem(slides){
+  // creates empty slides
+  let slideID;
+  for(let i = 0; i < slides.length; i++){
+    slideID = "slides"+i;
+    $('#map').owlCarousel()
+              .trigger('add.owl.carousel', [jQuery(`<div class="owl-item" id = ${slideID}>` +  + `</div>`)])
+              .trigger('refresh.owl.carousel');
   }
 }
+
 
 function sequence(data){
   let value = "";
