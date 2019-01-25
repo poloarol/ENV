@@ -4,17 +4,28 @@ div.ui.grid{
     min-width: 100%;
 }
 
-button.ui.compact.icon.basic.button{
-    float: right;
-}
-div.first{
-    position: relative;
-    top: 10%;
+/* div.ui.form.raised{
+    left: 0;
+    width: 100% !important;
+    top: -7em;
+} */
+
+div.ui.grid.first > div.fourteen.wide.column{
+    top: 4em !important;
 }
 
-div.second{
-    position: relative;
-    top: 8%;
+div.grid.second{
+    min-height: 100%;
+}
+
+
+
+div.fourteen.wide.column > div.container.center{
+    margin-top: 5em !important;
+}
+
+button.ui.compact.icon.basic.button{
+    float: right;
 }
 
 i.caret.down.icon{
@@ -36,7 +47,7 @@ div#drop{
 .container.center{
     display: inline-flex;
     margin-top: 3%;
-    margin-left: 30%;
+    margin-left: 15%;
 }
 
 div.container.center > div.ui.card, .ui.card{
@@ -56,12 +67,16 @@ div.canvasDiv{
     flex-direction: row-reverse;
 }
 
+div.owl-stage{
+    top: 5px;
+}
+
 div.owl-carousel, div.owl-stage-outer, div.owl-nav{
     position: absolute !important;
 }
 
 div.owl-carousel, div.owl-stage-outer{
-    margin-left: 13.5%;
+    margin-left: 3%;
 }
 
 div.owl-dots{
@@ -74,7 +89,7 @@ div.owl-carousel, div.owl-item{
 }
 
 div.owl-nav{
-    top: 15em;
+    top: 5em;
     width: 90%;
 }
 

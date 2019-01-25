@@ -11,6 +11,7 @@ function plotGenome(data){
         div[0].appendChild(slides[i]);
    }
   document.getElementById("name").innerHTML = data[0][0]["orgName"];
+  document.getElementById("acc_num").innerHTML = `Accession number : ${data[0][0]["accession_number"]}`;
 
   let chart = new Scribl(mainCanvas, 500);
 
@@ -29,13 +30,6 @@ function plotGenome(data){
     let datum = [data[i]]
     generateDiagram(secondaryChart, datum);
   }
-
-  const span = document.querySelectorAll(".ui.compact.icon.button");
-  // for(let i = 0; i < span.length; i++){
-  //   span[i].addEventListener("click", function(){
-  //     // copyToClickBoard(document.querySelectorAll("ui.compact.icon.button")[i]);
-  //   })
-  // }
 }
 
 function normalize(data, start){
@@ -94,11 +88,8 @@ function createSlides(data){
     // fastaDiv.appendChild(fastaIcon);
     icon.appendChild(geneDiv);
     // icon.appendChild(fastaDiv);
-    let name = document.createTextNode(`${data[i][0]["orgName"]}`);
-    let accession = document.createTextNode(`Accession #:`);
-
-    let value = sequence(data[i]);
-    buttonDiv.setAttribute("data-value", value);
+    let name = document.createTextNode(`${data[i][1]["orgName"]}`);
+    let accession = document.createTextNode(`Accession number : ${data[i][0]["accession_number"]}`);
 
     height.value = 400;
     width.value = 700;
@@ -141,14 +132,6 @@ function appendElem(slides){
 }
 
 
-function sequence(data){
-  let value = "";
-  for(let i = 0; i < data.length; i++){
-    value = value + data[i]["AA"]
-  }
-  return value;
-}
-
 function generateDiagram(chart, data){
   let gene;
   for(let i = 0; i < 1; i++){
@@ -171,7 +154,3 @@ function generateDiagram(chart, data){
   }
   chart.draw();
 }
-
-/*function copyToClickBoard(element){
-  console.log(element);
-}*/

@@ -95,17 +95,15 @@ def diagram(job_number):
     return render_template("diagram.html", gene = pathway, number = job_number)
 
 
-@app.route("/Phylogeny", methods=["GET", "POST"])
-def phylo():
-    """Create a phylogenetic tree based on inputed data."""
-    ## fasta_file = fasta()
-    return render_template("phylo.html")
-
-@app.route("/Phylogeny/<job_number>")
+@app.route("/Phylogeny/<job_number>", methods = ["GET", "POST"])
 def phyloTree(job_number):
     """Retrieve information from DB and produces form with orgnisms name."""
     pathway = retrieve_info(job_number)
-    return render_template("phyloTree.html", gene = pathway)
+    form = PhyloForm()
+    if request.method == "POST": 
+        print(request.form.getlist("gene"))
+        return render_template("phyloTree.html", gene = pathway, form = form, number = job_number)
+    return render_template("phyloTree.html", gene = pathway, form = form, number = job_number)
 
 @app.route("/error-404")
 def page_not_found():

@@ -2,17 +2,56 @@
 
 {% block content %}
 <div class="ui grid">
-        <div class="fourteen wide column">
-            <form action="" class="ui form">
-                {% for genes in pathway %}
-                    {% for gene in genes %}
-                    <div class="ui checkbox">
-                        <input type="checkbox" tabindex="0" class="hidden">
-                        <label>{{1}}</label>
+    <div class="fourteen wide content">
+        <div class="ui grid">
+            <div class="fourteen wide column">
+                <form class="ui form stacked segment" action="{{url_for('phyloTree', job_number = number)}}", method="POST">
+                    {{ form.hidden_tag() }}
+                <h3 class="ui dividing header">Choose organisms for analysis for BigScape analysis</h3>
+                <br>
+                {% for i in range(0, gene|length, 4) %}
+                <div class="inline fields">
+                    <div class="field">
+                        {% if gene[i] is defined %}
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="gene" value={{ gene[i][0].accession_number}}>
+                            <label>{{ gene[i][0].accession_number}}</label>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endfor %}
+                    <div class="field">
+                        {% if gene[i+1] is defined  %}
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="gene" value={{ gene[i+1][0].accession_number }}>
+                            <label>{{ gene[i+1][0].accession_number }}</label>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field">
+                        {% if gene[i+2] is defined  %}
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="gene" value={{ gene[i+2][0].accession_number }}>
+                            <label>{{ gene[i+2][0].accession_number }}</label>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field">
+                        {% if gene[i+3] is defined  %}
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="gene" value={{ gene[i+3][0].accession_number }}>
+                            <label>{{ gene[i+3][0].accession_number }}</label>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
                 {% endfor %}
+                <br>
+                <div>
+                    <h3 class="ui dividing header"></h3>
+                    <button class=" fluid ui positive button" value="submit">Submit</button>
+                </div>
             </form>
         </div>
     </div>
+</div>
 {% endblock %}

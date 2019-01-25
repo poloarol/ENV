@@ -6,11 +6,19 @@ html, body{
   position: relative;
 }
 
+.ui.grid{
+  min-width: 100%;
+}
+
 .ui.menu{
   height: 6em;
   margin: 5em;
   position: relative;
   top: 30px !important;
+}
+
+.ui.form.stacked.segment{
+  width: 80em !important;
 }
 
 .item{
@@ -36,6 +44,7 @@ html, body{
   left: 22em;
   padding: 40px;
 }
+
 
 .side{
   clear: both;

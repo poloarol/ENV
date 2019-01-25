@@ -35,10 +35,12 @@ class ReadFile():
         table: int = 0
         strand: int = 0
         position: int = 1
+        accession_number: str = "N/A"
         Info: NamedTuple = namedtuple('Info', 'locus, gene, protein_id, product, length')
     
         try:
             organism = record.annotations["source"]
+            accession_number = record.id
             for feature in record.features:
                 if "CDS" in feature.type:
                     for value in feature.qualifiers:
@@ -59,8 +61,8 @@ class ReadFile():
                     strand = feature.strand
                     start = feature.location.start.position
                     stop = feature.location.end.position
-                    gene: Gene = Gene(position, organism,locus_tag, gen, start, stop, codon_start, \
-                                table, product, protein_id, translation, strand)
+                    gene: Gene = Gene(position, accession_number, organism, locus_tag, gen, start, stop, codon_start, \
+                                                table, product, protein_id, translation, strand)
                     key: NamedTuple = Info(locus=locus_tag, gene=gen, protein_id=protein_id, \
                             product=product, length=stop-start)
                     self.GENOME.add(key, gene)

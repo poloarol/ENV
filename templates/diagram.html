@@ -8,11 +8,9 @@
 <div class="ui grid first">
   <div class="fourteen wide column">
     <div class="ui huge positive message">
-        <div class="header">
-            Analysis was completed successfully
-        </div>
-        <p>Job Number: <b> {{number}}. </b> This can be used for future references.</p>
-        <a target="_blank" href="{{url_for('phyloTree', job_number = number)}}">Continue for Phylogenetic Analysis</a>
+        <div class="header"> Analysis was completed successfully.</div>
+        <p>Reference number:  <b> {{number}}. </b></p>
+        <a target="_blank" class="fluid ui teal button" href="{{url_for('phyloTree', job_number = number)}}">Continue with a Bigscape analysis</a>
     </div>
   </div>
 </div>
@@ -23,7 +21,7 @@
       <div class="ui card">
         <div class="content">
           <div class="header" id="name">Organism Name: </div>
-          <div class="meta">Accession Number: </div>
+          <div class="meta" id="acc_num">Accession Number: </div>
           <div class="description" id="main">Click to see Gene info.</div>
         </div>
       </div>
@@ -34,8 +32,8 @@
 <script type="text/javascript">
   var gene = {{ gene | tojson}}
   //var parsed = JSON.parse(gene);
-  window.addEventListener('load', function(){
-    plotGenome(gene), false})
+  window.addEventListener('load', 
+          function(){ plotGenome(gene), false})
 </script>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/Scribl/Scribl.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='scripts/PlotGenome.js')}}"></script>
